@@ -1,0 +1,364 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -------------------------------------------------------
+// Enums
+// -------------------------------------------------------
+enum ProductStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
+}
+enum Size {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+enum RoleName {
+  USER
+  MANAGER
+  ADMIN
+}
+enum OrderStatus {
+  PENDING
+  PAID
+  FULFILLED
+  CANCELLED
+  REFUNDED
+}
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  REFUNDED
+}
+enum PaymentProvider {
+  MERCADOPAGO
+}
+enum Currency {
+  ARS
+  USD
+}
+
+// -------------------------------------------------------
+// Catálogo
+// -------------------------------------------------------
+model Product {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  description String?
+
+  brandId   String?
+  brand     Brand?   @relation(fields: [brandId], references: [id])
+  
+  categoryId String?
+  category  Category? @relation(fields: [categoryId], references: [id])
+
+  basePrice Int      @default(0)
+  status    ProductStatus @default(ACTIVE)
+
+  variants  ProductVariant[]
+  images    ProductImage[]
+  tags      Tag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("products")
+  @@index([status])
+  @@index([categoryId])
+  @@index([brandId])
+}
+
+model ProductVariant {
+  id        String @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  
+  colorId   String?
+  color     Color? @relation(fields: [colorId], references: [id])
+  
+  sku       String @unique
+  barcode   String?
+  size      Size
+  price     Int
+  stock     Int @default(0)
+  weightGrams Int?
+  
+  images     ProductImage[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([productId, size, colorId], map: "product_size_color_unique")
+  @@map("product_variants")
+  @@index([productId])
+  @@index([colorId])
+  @@index([size])
+}
+
+model Color {
+  id       String @id @default(cuid())
+  name     String
+  hex      String?
+  variants ProductVariant[] 
+  
+  @@map("colors")
+  @@unique([name])
+}
+
+model ProductImage {
+  id   String   @id @default(cuid())
+  url   String
+  alt   String?
+  position Int @default(0)
+
+  productId String?
+  product   Product?   @relation(fields: [productId], references: [id])
+  
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@map("product_images")
+  @@index([productId])
+  @@index([variantId])
+}
+
+model Category {
+  id   String   @id @default(cuid())
+  name String
+  slug String   @unique
+  parentId String?
+  
+  parent Category?   @relation("CategoryToSelf", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryToSelf")
+  products Product[]
+
+  @@map("categories")
+  @@index([parentId])
+}
+
+model Brand {
+  id   String   @id @default(cuid())
+  name String
+  slug String   @unique
+  products Product[]
+
+  @@map("brands")
+}
+
+model Tag {
+  id   String   @id @default(cuid())
+  name String
+  slug String   @unique
+  products Product[]
+
+  @@map("tags")
+}
+
+// -------------------------------------------------------
+// Usuarios, roles, direcciones
+// -------------------------------------------------------
+
+model User {
+  id   String   @id @default(cuid())
+  email String   @unique
+  name String?
+  hashedPassword String?
+
+  roles UserRole[]
+  addresses Address[]
+  carts Cart[]
+  orders Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  @@map("users")
+}
+
+model Role {
+  id   String   @id @default(cuid())
+  name RoleName   @unique
+  users UserRole[]
+
+  @@map("roles")
+}
+
+model UserRole {
+  userId String
+  roleId String
+
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+  @@index([roleId])
+}
+
+model Address {
+  id   String   @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  
+  firstName String
+  lastName String
+  phone String?
+  street1 String
+  street2 String?
+  city String
+  state String?
+  postalCode String?
+  country String
+  isDefault Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  @@map("addresses")
+  @@index([userId])
+}
+
+// -------------------------------------------------------
+// Carrito y checkout
+// -------------------------------------------------------
+
+model Cart {
+  id   String   @id @default(cuid())
+
+  userId String?   @unique
+  user   User?   @relation(fields: [userId], references: [id])
+  sessionId String?   // para invitados
+  
+  items CartItem[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sessionId])
+  @@map("carts")
+}
+
+model CartItem {
+  id   String   @id @default(cuid())
+  
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id])
+
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  
+  quantity Int   @default(1)
+  unitPriceSnap Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([cartId, variantId], map: "cart_variant_unique")
+  @@map("cart_items")
+  @@index([variantId])
+}
+
+// -------------------------------------------------------
+// Órdenes e historial de compras
+// -------------------------------------------------------
+
+model Order {
+  id   String   @id @default(cuid())
+  number Int   @unique @default(autoincrement())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  
+  status OrderStatus @default(PENDING)
+
+  currency Currency @default(ARS)
+  subtotal Int
+  shipping Int @default(0)
+  tax Int @default(0)
+  discount Int @default(0)
+  total Int
+  
+  items OrderItem[]
+  
+  payment Payment?
+  
+  shippingAddress Json
+  billingAddress Json?
+  mpPreferenceId String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id   String   @id @default(cuid())
+
+  orderId String
+  order   Order   @relation(fields: [orderId], references: [id])
+  
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+
+  quantity Int
+  unitPrice Int
+  // snapshots para historial estable
+  productName String
+  sku String
+  size Size
+  colorName String?
+
+  createdAt DateTime @default(now())
+  
+  @@unique([orderId, variantId], map: "order_variant_unique")
+  @@map("order_items")
+  @@index([variantId])
+}
+
+// -------------------------------------------------------
+// Pagos (Mercado Pago)
+// -------------------------------------------------------
+
+model Payment {
+  id   String   @id @default(cuid())
+
+  orderId String   @unique
+  order   Order   @relation(fields: [orderId], references: [id])
+  
+  provider PaymentProvider @default(MERCADOPAGO)
+  
+  status PaymentStatus @default(PENDING)
+  
+  amount Int
+  currency Currency @default(ARS)
+  providerPaymentId String?   @unique   // payment.id de MP
+  installments Int?
+  method String?   // "visa", "master", "account_money", etc.
+  capturedAt DateTime?
+  raw Json?   // snapshot de payload/webhook
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("payments")
+}
