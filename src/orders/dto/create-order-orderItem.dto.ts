@@ -1,8 +1,11 @@
 import { Currency, OrderStatus, Size } from "@prisma/client";
-import { Type } from "class-transformer";
-import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, IsOptional, IsJSON, IsArray, ValidateNested } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, IsOptional, IsJSON } from "class-validator";
 
 export class CreateOrderDto {
+    @IsString()
+    @IsOptional()
+    id?: string;
+
     @IsString()
     @IsNotEmpty()
     userId: string;
@@ -34,9 +37,24 @@ export class CreateOrderDto {
     @IsNumber()
     @IsPositive()
     total: number;
+
+    @IsJSON()
+    shippingAddress: JSON;
+
+    @IsJSON()
+    @IsOptional()
+    billingAddress?: JSON;
+
+    @IsString()
+    @IsOptional()
+    mpPreferenceId?: string;
 }
 
 export class CreateOrderItemDto {
+    @IsString()
+    @IsOptional()
+    id?: string;
+
     @IsString()
     @IsNotEmpty()
     orderId: string

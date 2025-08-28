@@ -14,6 +14,7 @@ interface EnvInterface {
     BACK_URL_PENDING: string;
     BACK_URL_FAILURE: string;
     MP_WEBHOOK_URL: string;
+    LIMIT: number;
 }
 
 const varsSchema = joi.object<EnvInterface>({
@@ -29,6 +30,7 @@ const varsSchema = joi.object<EnvInterface>({
     BACK_URL_PENDING: joi.string().required(),
     BACK_URL_FAILURE: joi.string().required(),
     MP_WEBHOOK_URL: joi.string().required(),
+    LIMIT: joi.number().required(),
 }).unknown(true);
 
 const { error, value } = varsSchema.validate(process.env);
@@ -50,4 +52,5 @@ export const envs = {
     back_url_pending: value.BACK_URL_PENDING,
     back_url_failure: value.BACK_URL_FAILURE,
     mp_webhook_url: value.MP_WEBHOOK_URL,
+    limit: value.LIMIT,
 } as const;

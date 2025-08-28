@@ -322,7 +322,7 @@ model OrderItem {
 
   quantity Int
   unitPrice Int
-  // snapshots para historial estable
+  
   productName String
   sku String
   size Size

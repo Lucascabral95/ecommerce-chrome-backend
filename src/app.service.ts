@@ -18,6 +18,10 @@ import productImagesSeed from 'mock/ProductImages.seed';
 import addressesSeed from 'mock/Addresses.seed';
 import cartItemsSeed from 'mock/Cart-Items.seed';
 import cartSeed from 'mock/Carts.seed';
+import orderItemsSeed from 'mock/Orders.item.seed';
+import ordersSeed from 'mock/Orders.seed';
+import paymentsSeed from 'mock/Payment.seed';
+import { Currency, OrderStatus, PaymentProvider, Size } from '@prisma/client';
 
 @Injectable()
 export class AppService {
@@ -32,6 +36,7 @@ export class AppService {
       await this.createDataBasic();
       await this.createSeedProduct();
       await this.createSeedCart();
+      await this.createSeedOrder();
 
       return 'Seed executed successfully';
 
@@ -43,6 +48,80 @@ export class AppService {
       handlePrismaError(error, 'generateGlobalSeed');
     }
   }
+
+  async createSeedOrder() {
+    try {
+      await this.prisma.$executeRawUnsafe(`
+        TRUNCATE TABLE
+          "order_items",
+          "payments",
+          "orders"
+        RESTART IDENTITY CASCADE;
+      `);
+
+      await this.prisma.order.createMany({
+        data: ordersSeed.map((order) => ({
+          id: order.id,
+          userId: order.userId,
+          status: order.status ?? OrderStatus.PENDING,
+          currency: order.currency ?? Currency.ARS,
+          subtotal: order.subtotal,
+          shipping: order.shipping ?? 0,
+          tax: order.tax ?? 0,
+          discount: order.discount ?? 0,
+          total: order.total,
+          shippingAddress: order.shippingAddress as any,
+          billingAddress: order.billingAddress ?? undefined,
+          mpPreferenceId: order.mpPreferenceId ?? undefined,
+        })),
+      });
+
+      if (orderItemsSeed?.length) {
+        await this.prisma.orderItem.createMany({
+          data: orderItemsSeed.map((item) => ({
+            id: item.id,
+            orderId: item.orderId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            productName: item.productName,
+            sku: item.sku,
+            size: item.size as Size,
+            colorName: item.colorName ?? undefined,
+          })),
+          skipDuplicates: true,
+        });
+      }
+
+      if (paymentsSeed?.length) {
+        await this.prisma.payment.createMany({
+          data: paymentsSeed.map((payment) => ({
+            id: payment.id,
+            orderId: payment.orderId,
+            provider: payment.provider ?? PaymentProvider.MERCADOPAGO,
+            status: payment.status,
+            amount: payment.amount,
+            currency: payment.currency,
+            providerPaymentId: payment.providerPaymentId ?? undefined,
+            installments: payment.installments ?? undefined,
+            method: payment.method ?? undefined,
+            capturedAt: payment.capturedAt ?? undefined,
+            raw: payment.raw ?? undefined,
+          })),
+        });
+      }
+
+      return { ok: true };
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        throw new handlePrismaError(error, "generateGlobalSeed");
+      }
+      handlePrismaError(error as any, "generateGlobalSeed");
+      throw error;
+    }
+  }
+
 
   async createSeedCart() {
     try {

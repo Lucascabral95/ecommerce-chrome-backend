@@ -1,23 +1,57 @@
 import { BadGatewayException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
-import { CreateAddressUserDto, CreateRolesUserDto, UpdateAddressUserDto, UpdateRolesUserDto } from './dto';
+import { CreateAddressUserDto, CreateRolesUserDto, PaginationUserDto, UpdateAddressUserDto, UpdateRolesUserDto } from './dto';
+import { envs } from 'src/config/env.schema';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) { }
 
-  async findAll() {
+  async findAll(paginationUserDto: PaginationUserDto) {
     try {
-      const users = await this.prisma.user.findMany({
-        select: {
-          id: true,
-          email: true,
-          name: true
-        }
-      });
+      const { page = 1, limit = envs.limit, name, email } = paginationUserDto;
 
-      return users;
+      const take = Math.max(1, Number(limit));
+      const currentPage = Math.max(1, Number(page));
+      const skip = (currentPage - 1) * take;
+
+      const where: Prisma.UserWhereInput = {
+        ...(name && { name: { contains: name, mode: 'insensitive' as const } }),
+        ...(email && { email: { contains: email, mode: 'insensitive' as const } }),
+      };
+
+      const [users, total] = await Promise.all([
+        this.prisma.user.findMany({
+          select: {
+            id: true,
+            email: true,
+            name: true
+          },
+          where,
+          skip,
+          take,
+          orderBy: {
+            createdAt: 'desc'
+          },
+        }),
+        this.prisma.user.count({ where }),
+      ]);
+
+      const totalPages = Math.max(1, Math.ceil(total / take));
+      const prevPage = currentPage > 1;
+      const nextPage = currentPage * take < total;
+
+      return {
+        page: currentPage,
+        limit: take,
+        total,
+        totalPages,
+        prevPage,
+        nextPage,
+        users,
+      };
     } catch (error) {
       if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
       handlePrismaError(error, 'Error finding users');

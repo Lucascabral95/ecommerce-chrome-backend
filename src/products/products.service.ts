@@ -4,7 +4,10 @@ import { UpdateProductDto, UpdateProductImageDto, UpdateProductVariantDto } from
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { generateSlug } from 'src/shared/utils/generate-slug';
-import { ProductStatus } from '@prisma/client';
+import { Prisma, ProductStatus } from '@prisma/client';
+import { PaginationProductDto } from './dto';
+import { envs } from 'src/config/env.schema';
+import { Size } from 'generated/prisma';
 
 @Injectable()
 export class ProductsService {
@@ -159,19 +162,70 @@ export class ProductsService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationProductDto: PaginationProductDto) {
     try {
-      const products = await this.prisma.product.findMany({
-        include: {
-          variants: true,
-          images: true,
-          tags: true,
-          brand: true,
-          category: true,
-        },
-      });
+      const {
+        page = 1,
+        limit = envs.limit,
+        name,
+        minPrice,
+        maxPrice,
+        status = ProductStatus.ACTIVE,
+        categoryId,
+        brandId,
+        size,
+        stock,
+      } = paginationProductDto
 
-      return products;
+      const take = Math.max(1, Number(limit));
+      const skip = (Number(page) - 1) * take;
+
+      const where: Prisma.ProductWhereInput = {
+        ... (name && { name: { contains: name, mode: 'insensitive' as const } }),
+        ... (status && { status: status as ProductStatus }),
+        ... (categoryId && { categoryId: categoryId }),
+        ... (brandId && { brandId: brandId }),
+        ... (minPrice && { basePrice: { gte: Number(minPrice) } }),
+        ... (maxPrice && { basePrice: { lte: Number(maxPrice) } }),
+        ...((size || stock) && {
+          variants: {
+            some: {
+              ...(size && { size: size as Size }),
+              ...(stock && { stock: { gte: Number(stock) } }), // mayor stock que
+            },
+          },
+        }),
+      };
+
+      const [products, total] = await Promise.all([
+        this.prisma.product.findMany({
+          where,
+          skip,
+          take,
+          include: {
+            variants: true,
+            images: true,
+            tags: true,
+            brand: true,
+            category: true,
+          },
+        }),
+        this.prisma.product.count({ where }),
+      ]);
+
+      const totalPages = Math.max(1, Math.ceil(total / take));
+      const prevPage = Number(page) > 1;
+      const nextPage = Number(page) * take < total;
+
+      return {
+        page: Number(page),
+        limit: take,
+        total,
+        totalPages,
+        prevPage,
+        nextPage,
+        products,
+      };
     } catch (error) {
       if (error instanceof BadRequestException || error instanceof InternalServerErrorException) throw error;
       handlePrismaError(error, 'Product');

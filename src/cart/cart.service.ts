@@ -1,7 +1,10 @@
 import { Injectable, NotFoundException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
-import { CreateCartDto, CartItemDto, UpdateCartItemDto } from './dto';
+import { CreateCartDto, CartItemDto, UpdateCartItemDto, PaginationCartDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
+import { envs } from 'src/config/env.schema';
+import { OrderBy } from 'src/orders/dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CartService {
@@ -59,15 +62,39 @@ export class CartService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationCartDto: PaginationCartDto) {
     try {
-      const carts = await this.prisma.cart.findMany();
+      const {
+        page = 1,
+        limit = envs.limit,
+        orderBy = OrderBy.DESC,
+      } = paginationCartDto
+
+      const take = Number(limit);
+      const skip = (page - 1) * take;
+
+      const [carts, total] = await Promise.all([
+        this.prisma.cart.findMany({ take, skip, orderBy: { createdAt: orderBy } }),
+        this.prisma.cart.count(),
+      ]);
 
       if (!carts) {
         throw new NotFoundException('No carts found');
       }
 
-      return carts;
+      const totalPages = Math.ceil(total / take);
+      const prevPage = page > 1 ? true : false;
+      const nextPage = page < totalPages ? true : false;
+
+      return {
+        total,
+        totalPages,
+        prevPage,
+        nextPage,
+        page,
+        limit,
+        carts,
+      };
     } catch (error) {
       if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
       handlePrismaError(error, 'Error finding carts');
@@ -133,7 +160,6 @@ export class CartService {
       handlePrismaError(error, 'Error removing cart');
     }
   }
-
 
   //items 
   async allItems() {

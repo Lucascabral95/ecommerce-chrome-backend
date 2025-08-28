@@ -4,6 +4,10 @@ import { IsDate, IsEnum, IsJSON, IsNumber, IsOptional, IsPositive, IsString } fr
 
 export class CreatePaymentDto {
     @IsString()
+    @IsOptional()
+    id?: string;
+
+    @IsString()
     orderId: string;
 
     @IsEnum(PaymentProvider)

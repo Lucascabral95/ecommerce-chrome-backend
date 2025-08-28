@@ -6,6 +6,10 @@ import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import MercadoPagoConfig, { Preference } from 'mercadopago';
 import { envs } from 'src/config/env.schema';
+import { PaginationPaymentDto } from './dto';
+import { OrderBy } from 'src/orders/dto';
+import { Prisma } from 'generated/prisma';
+import { Currency, PaymentProvider, PaymentStatus } from '@prisma/client';
 
 @Injectable()
 export class PaymentsService {
@@ -127,18 +131,61 @@ export class PaymentsService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationPaymentDto: PaginationPaymentDto) {
     try {
-      const payments = await this.prisma.payment.findMany();
+      const {
+        page = 1,
+        limit = envs.limit,
+        orderBy = OrderBy.DESC,
+        currency,
+        provider,
+        status,
+      } = paginationPaymentDto;
 
-      if (!payments) {
-        throw new NotFoundException('Payments not found');
-      }
+      const pageNum = Number(page) || 1;
+      const limitNum = Number(limit) || envs.limit;
 
-      return payments;
+      const take = Math.max(1, limitNum);
+      const skip = (pageNum - 1) * take;
 
+      const where = {
+        ...(currency && { currency: currency as Currency }),
+        ...(provider && { provider: provider as PaymentProvider }),
+        ...(status && { status: status as PaymentStatus }),
+      };
+
+      const [payments, total] = await this.prisma.$transaction([
+        this.prisma.payment.findMany({
+          where,
+          take,
+          skip,
+          orderBy: {
+            createdAt: orderBy === OrderBy.DESC ? 'desc' : 'asc',
+          },
+        }),
+        this.prisma.payment.count({ where }),
+      ]);
+
+      const totalPages = Math.ceil(total / take);
+      const prevPage = Number(page) > 1;
+      const nextPage = Number(page) < totalPages;
+
+      return {
+        page: Number(page),
+        limit: take,
+        total,
+        totalPages,
+        prevPage,
+        nextPage,
+        payments,
+      };
     } catch (error) {
-      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      console.log(error);
+      if (
+        error instanceof NotFoundException ||
+        error instanceof InternalServerErrorException
+      )
+        throw error;
       handlePrismaError(error, 'Error finding payments');
     }
   }
