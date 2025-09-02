@@ -34,7 +34,7 @@ export class CreateAddressUserDto {
 
     @IsString()
     @IsOptional()
-    zipCode?: string;
+    postalCode?: string;
 
     @IsString()
     country: string;

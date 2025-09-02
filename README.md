@@ -47,6 +47,11 @@ $ npm run start:prod
 ## Run tests
 
 ```bash
+docker-compose up --build -d
+docker-compose exec app npx prisma migrate dev
+```
+
+```bash
 # unit tests
 $ npm run test
 

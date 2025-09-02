@@ -3,7 +3,7 @@ import { CreateCartDto } from "src/cart/dto";
 const cartSeed: CreateCartDto[] = [
     {
         id: "8d8ac610-566d-4ef0-9c22-186b2a5ed793",
-        userId: "6e678f4c-c0a7-468a-be7a-29191bf49955",
+        userId: "6e678f4c-c0a7-468a-be7a-29191bf49955",  // Cart de Lucas Cabral
     },
     {
         id: "aa97b177-9383-4934-8543-0f91a7a02836",

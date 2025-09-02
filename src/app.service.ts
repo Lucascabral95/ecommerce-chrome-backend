@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from './errors/handler-prisma-error';
-import { generateSlug } from 'src/shared/utils/generate-slug';
+import { generateSKU, generateSlug } from 'src/shared/utils/generate-slug';
 
 import roleName from 'mock/Rolename.seed';
 import colorsSeed from 'mock/Colors.seed';
@@ -22,6 +22,7 @@ import orderItemsSeed from 'mock/Orders.item.seed';
 import ordersSeed from 'mock/Orders.seed';
 import paymentsSeed from 'mock/Payment.seed';
 import { Currency, OrderStatus, PaymentProvider, Size } from '@prisma/client';
+import { BillingAddress, ShippingAddress } from './orders/dto';
 
 @Injectable()
 export class AppService {
@@ -39,165 +40,6 @@ export class AppService {
       await this.createSeedOrder();
 
       return 'Seed executed successfully';
-
-    } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        throw new handlePrismaError(error, 'generateGlobalSeed');
-      }
-      handlePrismaError(error, 'generateGlobalSeed');
-    }
-  }
-
-  async createSeedOrder() {
-    try {
-      await this.prisma.$executeRawUnsafe(`
-        TRUNCATE TABLE
-          "order_items",
-          "payments",
-          "orders"
-        RESTART IDENTITY CASCADE;
-      `);
-
-      await this.prisma.order.createMany({
-        data: ordersSeed.map((order) => ({
-          id: order.id,
-          userId: order.userId,
-          status: order.status ?? OrderStatus.PENDING,
-          currency: order.currency ?? Currency.ARS,
-          subtotal: order.subtotal,
-          shipping: order.shipping ?? 0,
-          tax: order.tax ?? 0,
-          discount: order.discount ?? 0,
-          total: order.total,
-          shippingAddress: order.shippingAddress as any,
-          billingAddress: order.billingAddress ?? undefined,
-          mpPreferenceId: order.mpPreferenceId ?? undefined,
-        })),
-      });
-
-      if (orderItemsSeed?.length) {
-        await this.prisma.orderItem.createMany({
-          data: orderItemsSeed.map((item) => ({
-            id: item.id,
-            orderId: item.orderId,
-            variantId: item.variantId,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-            productName: item.productName,
-            sku: item.sku,
-            size: item.size as Size,
-            colorName: item.colorName ?? undefined,
-          })),
-          skipDuplicates: true,
-        });
-      }
-
-      if (paymentsSeed?.length) {
-        await this.prisma.payment.createMany({
-          data: paymentsSeed.map((payment) => ({
-            id: payment.id,
-            orderId: payment.orderId,
-            provider: payment.provider ?? PaymentProvider.MERCADOPAGO,
-            status: payment.status,
-            amount: payment.amount,
-            currency: payment.currency,
-            providerPaymentId: payment.providerPaymentId ?? undefined,
-            installments: payment.installments ?? undefined,
-            method: payment.method ?? undefined,
-            capturedAt: payment.capturedAt ?? undefined,
-            raw: payment.raw ?? undefined,
-          })),
-        });
-      }
-
-      return { ok: true };
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        throw new handlePrismaError(error, "generateGlobalSeed");
-      }
-      handlePrismaError(error as any, "generateGlobalSeed");
-      throw error;
-    }
-  }
-
-
-  async createSeedCart() {
-    try {
-      await this.prisma.$executeRaw`TRUNCATE TABLE "carts" RESTART IDENTITY CASCADE;`;
-      await this.prisma.$executeRaw`TRUNCATE TABLE "cart_items" RESTART IDENTITY CASCADE;`;
-
-      await this.prisma.cart.createMany({
-        data: cartSeed.map(cartItem => ({
-          id: cartItem.id,
-          userId: cartItem.userId,
-          sessionId: cartItem.sessionId,
-        })),
-      });
-
-      await this.prisma.cartItem.createMany({
-        data: cartItemsSeed.map(cartItem => ({
-          id: cartItem.id,
-          cartId: cartItem.cartId,
-          variantId: cartItem.variantId,
-          quantity: cartItem.quantity,
-          unitPriceSnap: cartItem.unitPriceSnap,
-        })),
-      });
-
-    } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        throw new handlePrismaError(error, 'generateGlobalSeed');
-      }
-      handlePrismaError(error, 'generateGlobalSeed');
-    }
-  }
-
-  async createSeedProduct() {
-    try {
-      await this.prisma.$executeRaw`TRUNCATE TABLE "products" RESTART IDENTITY CASCADE;`;
-      await this.prisma.$executeRaw`TRUNCATE TABLE "product_variants" RESTART IDENTITY CASCADE;`;
-      await this.prisma.$executeRaw`TRUNCATE TABLE "product_images" RESTART IDENTITY CASCADE;`;
-
-      await this.prisma.product.createMany({
-        data: productsSeed.map(product => ({
-          id: product.id,
-          name: product.name,
-          slug: generateSlug(product.name),
-          description: product.description,
-          brandId: product.brandId,
-          categoryId: product.categoryId,
-          basePrice: product.basePrice,
-          status: product.status
-        })),
-      });
-
-      await this.prisma.productVariant.createMany({
-        data: productVariantsSeed.map(productVariant => ({
-          id: productVariant.id,
-          productId: productVariant.productId,
-          colorId: productVariant.colorId,
-          sku: productVariant.sku,
-          barcode: productVariant.barcode,
-          size: productVariant.size,
-          price: productVariant.price,
-          stock: productVariant.stock,
-          weightGrams: productVariant.weightGrams
-        })),
-      });
-
-      await this.prisma.productImage.createMany({
-        data: productImagesSeed.map(productImage => ({
-          id: productImage.id,
-          productId: productImage.productId,
-          variantId: productImage.variantId,
-          url: productImage.url,
-          alt: productImage.alt,
-          position: productImage.position
-        })),
-      });
 
     } catch (error) {
       console.log(error);
@@ -275,21 +117,21 @@ export class AppService {
         })),
       });
 
-      // await this.prisma.address.createMany({
-      //   data: addressesSeed.map(address => ({
-      //     id: address.id,
-      //     userId: address.userId,
-      //     firstName: address.firstName,
-      //     lastName: address.lastName,
-      //     phone: address.phone,
-      //     street1: address.street1,
-      //     street2: address.street2,
-      //     city: address.city,
-      //     state: address.state,
-      //     zipCode: address.zipCode,
-      //     country: address.country,
-      //   })),
-      // });
+      await this.prisma.address.createMany({
+        data: addressesSeed.map(address => ({
+          id: address.id,
+          userId: address.userId,
+          firstName: address.firstName,
+          lastName: address.lastName,
+          phone: address.phone,
+          street1: address.street1,
+          street2: address.street2,
+          city: address.city,
+          state: address.state,
+          postalCode: address.postalCode,
+          country: address.country,
+        })),
+      });
 
       return 'Data basic created successfully';
     } catch (error) {
@@ -301,4 +143,172 @@ export class AppService {
     }
   }
 
+  async createSeedProduct() {
+    try {
+      await this.prisma.$executeRawUnsafe(`
+        TRUNCATE TABLE
+          "product_images",
+          "product_variants",
+          "_ProductToTag",
+          "products"
+        RESTART IDENTITY CASCADE;
+      `);
+
+
+      await this.prisma.product.createMany({
+        data: productsSeed.map(product => ({
+          id: product.id,
+          name: product.name,
+          slug: product.slug || generateSlug(product.name),
+          description: product.description,
+          brandId: product.brandId,
+          categoryId: product.categoryId,
+          basePrice: product.basePrice,
+          status: product.status
+        })),
+        skipDuplicates: true
+      });
+
+      await this.prisma.productVariant.createMany({
+        data: productVariantsSeed.map(productVariant => ({
+          id: productVariant.id,
+          productId: productVariant.productId,
+          colorId: productVariant.colorId,
+          sku: generateSKU(),
+          barcode: productVariant.barcode || undefined,
+          size: productVariant.size,
+          price: productVariant.price,
+          stock: productVariant.stock,
+          weightGrams: productVariant.weightGrams
+        })),
+        skipDuplicates: true,
+      });
+
+      await this.prisma.productImage.createMany({
+        data: productImagesSeed.map(productImage => ({
+          id: productImage.id,
+          productId: productImage.productId,
+          variantId: productImage.variantId,
+          url: productImage.url,
+          alt: productImage.alt,
+          position: productImage.position
+        })),
+        skipDuplicates: true,
+      });
+
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        throw new handlePrismaError(error, 'generateGlobalSeed');
+      }
+      handlePrismaError(error, 'generateGlobalSeed');
+    }
+  }
+
+  async createSeedCart() {
+    try {
+      await this.prisma.$executeRawUnsafe(`
+        TRUNCATE TABLE "carts", "cart_items" RESTART IDENTITY CASCADE;
+      `);
+
+      await this.prisma.cart.createMany({
+        data: cartSeed.map(cartItem => ({
+          id: cartItem.id,
+          userId: cartItem.userId,
+          sessionId: cartItem.sessionId,
+        })),
+      });
+
+      await this.prisma.cartItem.createMany({
+        data: cartItemsSeed.map(cartItem => ({
+          id: cartItem.id,
+          cartId: cartItem.cartId,
+          variantId: cartItem.variantId,
+          quantity: cartItem.quantity,
+          unitPriceSnap: cartItem.unitPriceSnap,
+        })),
+      });
+
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        throw new handlePrismaError(error, 'generateGlobalSeed');
+      }
+      handlePrismaError(error, 'generateGlobalSeed');
+    }
+  }
+
+  async createSeedOrder() {
+    try {
+      await this.prisma.$executeRawUnsafe(`
+        TRUNCATE TABLE
+          "order_items",
+          "payments",
+          "orders"
+        RESTART IDENTITY CASCADE;
+      `);
+
+
+      await this.prisma.order.createMany({
+        data: ordersSeed.map((order) => ({
+          id: order.id,
+          userId: order.userId,
+          status: order.status ?? OrderStatus.PENDING,
+          currency: order.currency ?? Currency.ARS,
+          subtotal: order.subtotal,
+          shipping: order.shipping ?? 0,
+          tax: order.tax ?? 0,
+          discount: order.discount ?? 0,
+          total: order.total,
+          shippingAddress: { ...order.shippingAddress },
+          billingAddress: order.billingAddress ? { ...order.billingAddress } : undefined,
+          mpPreferenceId: order.mpPreferenceId ?? undefined,
+        })),
+      });
+
+      if (orderItemsSeed?.length) {
+        await this.prisma.orderItem.createMany({
+          data: orderItemsSeed.map((item) => ({
+            id: item.id,
+            orderId: item.orderId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            productName: item.productName,
+            sku: item.sku,
+            size: item.size as Size,
+            colorName: item.colorName ?? undefined,
+          })),
+          skipDuplicates: true,
+        });
+      }
+
+      // if (paymentsSeed?.length) {
+      //   await this.prisma.payment.createMany({
+      //     data: paymentsSeed.map((payment) => ({
+      //       id: payment.id,
+      //       orderId: payment.orderId,
+      //       provider: payment.provider ?? PaymentProvider.MERCADOPAGO,
+      //       status: payment.status,
+      //       amount: payment.amount,
+      //       currency: payment.currency,
+      //       providerPaymentId: payment.providerPaymentId ?? undefined,
+      //       installments: payment.installments ?? undefined,
+      //       method: payment.method ?? undefined,
+      //       capturedAt: payment.capturedAt ?? undefined,
+      //       raw: payment.raw ?? undefined,
+      //     })),
+      //   });
+      // }
+
+      return { ok: true };
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        throw new handlePrismaError(error, "generateGlobalSeed");
+      }
+      handlePrismaError(error as any, "generateGlobalSeed");
+      throw error;
+    }
+  }
 }

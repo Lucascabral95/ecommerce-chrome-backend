@@ -2,64 +2,74 @@ import { CreateColorDto } from "src/catalog/dto";
 
 const colorsSeed: CreateColorDto[] = [
     {
-        "id": "a1b2c3d4-e5f6-4789-a012-123456789abc",
-        "name": "red",
-        "hex": "#FF0000"
+        id: "04f1c0b7-2cde-4e8a-8d3f-9a6b51c27e91",
+        name: "Negro",
+        hex: "#000000"
     },
     {
-        "id": "b2c3d4e5-f6a7-4890-b123-23456789abcd",
-        "name": "blue",
-        "hex": "#0000FF"
+        id: "15a2d1c8-3def-4f9b-9e40-0b7c62d38fa2",
+        name: "Blanco",
+        hex: "#FFFFFF"
     },
     {
-        "id": "c3d4e5f6-a7b8-4901-c234-3456789abcde",
-        "name": "green",
-        "hex": "#008000"
+        id: "26b3e2d9-4e00-4a0c-8f51-1c8d73e49ab3",
+        name: "Azul Marino"
+        , hex: "#0B2742"
     },
     {
-        "id": "d4e5f6a7-b8c9-4012-d345-456789abcdef",
-        "name": "black",
-        "hex": "#000000"
+        id: "37c4f3ea-5f11-4b1d-9a62-2d9e84f5bc14",
+        name: "Azul",
+        hex: "#1F4E79"
     },
     {
-        "id": "e5f6a7b8-c9da-4123-e456-56789abcdef0",
-        "name": "white",
-        "hex": "#FFFFFF"
+        id: "48d504fb-6022-4c2e-8b73-3eaf95g6cd25",
+        name: "Celeste",
+        hex: "#7FB3D5"
     },
     {
-        "id": "f6a7b8c9-daeb-4234-f567-6789abcdef01",
-        "name": "yellow",
-        "hex": "#FFFF00"
+        id: "59e6150c-7133-4d3f-9c84-4fb0a6h7de36",
+        name: "Gris Oscuro"
+        , hex: "#4A4A4A"
     },
     {
-        "id": "a7b8c9da-ebfc-4345-a678-789abcdef012",
-        "name": "orange",
-        "hex": "#FFA500"
+        id: "6af7261d-8244-4e40-8d95-50c1b7i8ef47",
+        name: "Gris",
+        hex: "#808080"
     },
     {
-        "id": "b8c9daeb-fc0d-4456-b789-89abcdef0123",
-        "name": "pink",
-        "hex": "#FFC0CB"
+        id: "7b08372e-9355-4f51-9ea6-61d2c8j9f058",
+        name: "Gris Claro"
+        , hex: "#B3B3B3"
     },
     {
-        "id": "c9daebfc-0d1e-4567-c890-9abcdef01234",
-        "name": "purple",
-        "hex": "#800080"
+        id: "8c19483f-a466-4052-8fb7-72e3d90a0169",
+        name: "Bordó",
+        hex: "#7A263A"
     },
     {
-        "id": "daebfc0d-1e2f-4678-d901-abcdef012345",
-        "name": "gray",
-        "hex": "#808080"
+        id: "9d2a5940-b577-4153-9gc8-83f4ea1b127a",
+        name: "Verde Oliva"
+        , hex: "#556B2F"
     },
     {
-        "id": "ebfc0d1e-2f30-4789-e012-bcdef0123456",
-        "name": "brown",
-        "hex": "#A52A2A"
+        id: "ae3b6a51-c688-4254-8hd9-94g5fb2c238b",
+        name: "Beige",
+        hex: "#D8C3A5"
     },
     {
-        "id": "fc0d1e2f-3041-4890-f123-cdef01234567",
-        "name": "turquoise",
-        "hex": "#40E0D0"
+        id: "bf4c7b62-d799-4355-9ie0-a5h60c3d349c",
+        name: "Tostado",
+        hex: "#C9A26B"
+    },
+    {
+        id: "c05d8c73-e8aa-4456-8jf1-b6i71d4e45ad",
+        name: "Marrón",
+        hex: "#5A3E2B"
+    },
+    {
+        id: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123",
+        name: "Verde",
+        hex: "#008000"
     }
 ];
 

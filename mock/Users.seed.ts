@@ -3,7 +3,7 @@ import { RegisterAuthDto } from "src/auth/dto"
 const usersSeed: RegisterAuthDto[] = [
     {
         "id": "6e678f4c-c0a7-468a-be7a-29191bf49955",
-        "email": "lucas@example.com",
+        "email": "lucas@hotmail.com",
         "hashedPassword": "123456",
         "name": "Lucas Cabral"
     },

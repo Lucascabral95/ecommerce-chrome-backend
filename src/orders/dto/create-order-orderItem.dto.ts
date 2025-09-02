@@ -1,5 +1,39 @@
 import { Currency, OrderStatus, Size } from "@prisma/client";
-import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, IsOptional, IsJSON } from "class-validator";
+import { Type } from "class-transformer";
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, IsOptional, ValidateNested } from "class-validator";
+
+
+// BillingAddress 
+export class BillingAddress {
+    @IsString()
+    street: string;
+
+    @IsString()
+    city: string;
+
+    @IsString()
+    state: string;
+
+    @IsString()
+    postalCode: string;
+
+    @IsString()
+    country: string;
+
+    @IsString()
+    contactName: string;
+
+    @IsString()
+    @IsOptional()
+    phone?: string;
+}
+
+// ShippingAddress 
+export class ShippingAddress extends BillingAddress {
+    @IsString()
+    @IsOptional()
+    taxId: string; // CUIL
+}
 
 export class CreateOrderDto {
     @IsString()
@@ -38,12 +72,14 @@ export class CreateOrderDto {
     @IsPositive()
     total: number;
 
-    @IsJSON()
-    shippingAddress: JSON;
+    @Type(() => ShippingAddress)
+    @ValidateNested({ each: true })
+    shippingAddress: ShippingAddress;
 
-    @IsJSON()
+    @Type(() => BillingAddress)
+    @ValidateNested({ each: true })
     @IsOptional()
-    billingAddress?: JSON;
+    billingAddress?: BillingAddress;
 
     @IsString()
     @IsOptional()
