@@ -2,7 +2,9 @@ import 'dotenv/config';
 import * as joi from 'joi';
 
 interface EnvInterface {
-    PORT: string;
+    PORT: number;
+    LIMIT: number;
+    NODE_ENV: string;
     POSTGRES_DB: string;
     POSTGRES_USER: string;
     POSTGRES_PASSWORD: string;
@@ -14,11 +16,12 @@ interface EnvInterface {
     BACK_URL_PENDING: string;
     BACK_URL_FAILURE: string;
     MP_WEBHOOK_URL: string;
-    LIMIT: number;
 }
 
 const varsSchema = joi.object<EnvInterface>({
-    PORT: joi.string().required(),
+    PORT: joi.number().required(),
+    LIMIT: joi.number().required(),
+    NODE_ENV: joi.string().required(),
     POSTGRES_DB: joi.string().required(),
     POSTGRES_USER: joi.string().required(),
     POSTGRES_PASSWORD: joi.string().required(),
@@ -30,7 +33,6 @@ const varsSchema = joi.object<EnvInterface>({
     BACK_URL_PENDING: joi.string().required(),
     BACK_URL_FAILURE: joi.string().required(),
     MP_WEBHOOK_URL: joi.string().required(),
-    LIMIT: joi.number().required(),
 }).unknown(true);
 
 const { error, value } = varsSchema.validate(process.env);
@@ -41,6 +43,8 @@ if (error) {
 
 export const envs = {
     port: value.PORT,
+    limit: value.LIMIT,
+    node_env: value.NODE_ENV,
     postgres_db: value.POSTGRES_DB,
     postgres_user: value.POSTGRES_USER,
     postgres_password: value.POSTGRES_PASSWORD,
@@ -52,5 +56,4 @@ export const envs = {
     back_url_pending: value.BACK_URL_PENDING,
     back_url_failure: value.BACK_URL_FAILURE,
     mp_webhook_url: value.MP_WEBHOOK_URL,
-    limit: value.LIMIT,
 } as const;

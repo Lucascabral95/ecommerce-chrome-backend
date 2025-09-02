@@ -18,91 +18,259 @@ export class PaymentsService {
   constructor(private readonly prisma: PrismaService) {
     const client = new MercadoPagoConfig({
       accessToken: envs.mp_access_token,
+      options: {
+        timeout: 5000
+      }
     });
     this.preference = new Preference(client);
   }
 
-  async createPreference(userId: string, orderId?: string) {
+  // async createPreference(userId: string) {
+  //   try {
+  //     const user = await this.prisma.user.findUnique({
+  //       where: {
+  //         id: userId
+  //       }
+  //     });
+
+  //     if (!user) throw new NotFoundException(`User with id: ${userId} not found`);
+  //     const email = user.email;
+
+  //     const cart = await this.prisma.cart.findFirst({
+  //       where: {
+  //         userId: userId,
+  //       },
+  //       include: {
+  //         items: {
+  //           include: {
+  //             variant: {
+  //               include: {
+  //                 product: true,
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     });
+  //     if (!cart) throw new NotFoundException(`Cart for user with id: ${userId} not found`);
+
+  //     const body = {
+  //       items: cart.items.map(item => ({
+  //         id: item.variant.id,
+  //         title: item.variant.product.name,
+  //         quantity: item.quantity,
+  //         currency_id: Currency.ARS,
+  //         unit_price: Number(item.variant.price),
+  //       })),
+  //       payer: { email },
+  //       back_urls: {
+  //         success: envs.back_url_success,
+  //         pending: envs.back_url_pending,
+  //         failure: envs.back_url_failure,
+  //       },
+  //       // auto_return: 'approved',
+  //       notification_url: envs.mp_webhook_url,
+  //       external_reference: `ref_${Date.now()}`,
+  //     };
+
+  //     const requestOptions = {
+  //       idempotencyKey: `pref_${Date.now()}`
+  //     };
+
+  //     const result = await this.preference.create({
+  //       body,
+  //       requestOptions
+  //     });
+
+  //     if (!result?.id) throw new Error('No se recibió id de preferencia');
+  //     const preferenceUrl = result.sandbox_init_point || result.init_point;
+  //     if (!preferenceUrl) throw new Error('No se recibió init_point');
+
+  //     return {
+  //       ok: true,
+  //       id: result.id,
+  //       init_point: result.init_point ?? null,
+  //       sandbox_init_point: result.sandbox_init_point ?? null,
+  //       preference_url: preferenceUrl,
+  //       external_reference: result.external_reference ?? body.external_reference,
+  //     };
+  //   } catch (error: any) {
+  //     console.error('MercadoPago preference error:', {
+  //       status: error?.response?.status,
+  //       data: error?.response?.data,
+  //       headers: error?.response?.headers,
+  //       message: error?.message,
+  //     });
+  //     throw new InternalServerErrorException('No se pudo crear la preferencia de pago');
+  //   }
+  // }
+
+  async createPreference(userId: string) {
     try {
-      const cart = await this.prisma.cart.findUnique({
-        where: {
-          userId: userId,
-        },
-        include: {
-          items: {
-            include: {
-              variant: {
-                include: {
-                  product: true,
-                  color: true
-                }
-              }
-            }
-          }
-        }
-      });
-
-      if (!cart || !cart.items.length) {
-        throw new NotFoundException('Cart is empty');
-      }
-
-      const items = cart.items.map(item => ({
-        id: item.variantId,
-        title: `${item.variant.product.name}${item.variant.color ? ` - ${item.variant.color.name}` : ''}`,
-        description: item.variant.product.description?.substring(0, 250) || '',
-        category_id: item.variant.product.categoryId || 'general',
-        quantity: item.quantity,
-        currency_id: 'ARS',
-        unit_price: Number(item.variant.price),
-      }));
-
-      const user = await this.prisma.user.findUnique({
+      const user = await this.prisma.user.findFirst({
         where: { id: userId }
       });
 
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
+      if (!user) throw new NotFoundException(`User with id: ${userId} not found`);
 
-      const preference = {
-        items,
-        payer: {
-          email: user.email,
-          name: user.name || '',
-        },
-        metadata: {
-          userId,
-          cartId: cart.id,
-          ...(orderId && { orderId })
-        },
-        back_urls: {
-          success: envs.back_url_success,
-          pending: envs.back_url_pending,
-          failure: envs.back_url_failure,
-        },
-        auto_return: 'approved',
-        notification_url: envs.mp_webhook_url,
-        statement_descriptor: 'TIENDA',
-        binary_mode: true,
-        external_reference: orderId || cart.id
-      };
+      const findCartBydUserId = await this.prisma.cart.findFirst({
+        where: { userId }
+      });
 
-      const result = await this.preference.create({ body: preference });
+      if (!findCartBydUserId) throw new NotFoundException(`Cart for user with id: ${userId} not found`);
+
+      const cartItems = await this.prisma.cartItem.findMany({
+        where: { cartId: findCartBydUserId.id },
+        include: {
+          variant: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      });
+
+      const body = await this.preference.create({
+        body: {
+          items: cartItems.map(item => ({
+            id: item.variant.id,
+            title: item.variant.product.name,
+            quantity: item.quantity,
+            unit_price: Number(item.variant.price),
+            currency_id: Currency.ARS,
+          })),
+          external_reference: `ref_${Date.now()}`,
+          back_urls: {
+            success: "https://links-shorteneres.onrender.com",
+            pending: "https://links-shorteneres.onrender.com",
+            failure: "https://links-shorteneres.onrender.com",
+          },
+          notification_url: envs.mp_webhook_url,
+          auto_return: 'approved',  // Para que funcione, las redirecciones deben ser HTTPS
+        },
+      });
+
+      console.log('🚀 Creando preferencia de pago:', { body });
 
       return {
-        id: result.id,
-        init_point: result.init_point,
-        sandbox_init_point: result.sandbox_init_point,
-        preference_url: result.sandbox_init_point || result.init_point
+        ok: true,
+        id: body?.id ?? null,
+        init_point: body?.init_point ?? null,
+        sandbox_init_point: body?.sandbox_init_point ?? null,
+        user: userId,
       };
-
     } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      handlePrismaError(error, 'Error creating payment preference');
-      throw new InternalServerErrorException('Error creating payment preference');
+      if (error instanceof InternalServerErrorException || error instanceof NotFoundException) throw error;
+      handlePrismaError(error, 'Payment');
+      throw error;
     }
   }
 
+
+
+  async handleMpPaymentNotification(paymentId: string) {
+    try {
+      console.log("🔔 Notificación recibida. paymentId =", paymentId);
+
+      const resp = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+        headers: {
+          Authorization: `Bearer ${envs.mp_access_token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("🌐 MP /v1/payments status:", resp.status, resp.statusText);
+      const text = await resp.text();
+      console.log("🧾 MP /v1/payments raw body:", text);
+
+      if (!resp.ok) {
+        console.error("❌ Error al consultar pago en MP (raw):", text);
+        throw new Error(`Error al consultar pago: HTTP ${resp.status}`);
+      }
+
+      const mpData = JSON.parse(text);
+
+      console.log("📊 Pago MP:");
+      console.log("- id:", mpData.id);
+      console.log("- status:", mpData.status);
+      console.log("- status_detail:", mpData.status_detail);
+      console.log("- transaction_amount:", mpData.transaction_amount);
+      console.log("- payment_method_id:", mpData.payment_method_id);
+      console.log("- payer.email:", mpData.payer?.email);
+      console.log("- external_reference:", mpData.external_reference);
+
+      const externalReference = mpData.external_reference;
+      if (!externalReference) {
+        throw new Error("No se encontró external_reference en la respuesta de MP");
+      }
+
+      const mapStatus = (mpStatus: string): PaymentStatus => {
+        switch (mpStatus) {
+          case "approved": return PaymentStatus.APPROVED;
+          case "pending": return PaymentStatus.PENDING;
+          case "rejected": return PaymentStatus.REJECTED;
+          case "refunded": return PaymentStatus.REFUNDED;
+          case "cancelled": return PaymentStatus.CANCELLED;
+          default: return PaymentStatus.PENDING;
+        }
+      };
+
+      const status = mapStatus(mpData.status);
+      const updateData: any = {
+        status,
+        providerPaymentId: String(paymentId),
+        method: mpData.payment_method_id,
+        installments: mpData.installments || 1,
+        fee: (mpData.fee_details || []).reduce((sum: number, f: any) => sum + (f?.amount || 0), 0),
+        raw: mpData,
+      };
+      if (status === PaymentStatus.APPROVED) updateData.capturedAt = new Date();
+
+      // Actualizar tu Payment por external_reference (si en tu sistema usas ese ID)
+      const payment = await this.prisma.payment.update({
+        where: { id: externalReference },
+        data: updateData,
+        include: { order: true },
+      });
+
+      console.log("✅ Pago actualizado en DB:", {
+        paymentId: externalReference,
+        status: payment.status,
+        orderId: payment.orderId,
+      });
+
+      if (status === PaymentStatus.APPROVED && payment.orderId) {
+        await this.prisma.order.update({
+          where: { id: payment.orderId },
+          data: { status: "PAID" },
+        });
+        console.log("✅ Orden marcada PAID:", payment.orderId);
+      }
+
+      return payment;
+    } catch (error) {
+      console.error("❌ Error en handleMpPaymentNotification:", error);
+      throw new InternalServerErrorException("Error al procesar notificación de pago");
+    }
+  }
+
+  /////////////////////////
+  /////////////////////////
+  /////////////////////////
+  /////////////////////////
+  /////////////////////////
+  /////////////////////////
+  //CREATE
+  //CREATE
+  //CREATE
+  //CREATE
+  //CREATE
+  //CREATE
+  //CREATE
+  /////////////////////////
+  /////////////////////////
+  /////////////////////////
+  /////////////////////////
   /////////////////////////
   async create(createPaymentDto: CreatePaymentDto) {
     try {

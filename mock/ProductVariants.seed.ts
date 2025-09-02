@@ -8,7 +8,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "d4e5f6a7-b8c9-4012-d345-456789abcdef", // black
         sku: "NIKE-DRIFIT-BLK-M",
         barcode: "1234567890123",
-        size: Size.M,
+        size: Size.M as Size,
         price: 15999,
         stock: 25,
         weightGrams: 180
@@ -19,7 +19,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "e5f6a7b8-c9da-4123-e456-56789abcdef0", // white
         sku: "NIKE-DRIFIT-WHT-L",
         barcode: "1234567890124",
-        size: Size.L,
+        size: Size.L as Size,
         price: 15999,
         stock: 18,
         weightGrams: 190
@@ -30,7 +30,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "b2c3d4e5-f6a7-4890-b123-23456789abcd", // blue
         sku: "ZARA-JEAN-BLU-32",
         barcode: "2345678901234",
-        size: Size.M,
+        size: Size.M as Size,
         price: 24999,
         stock: 15,
         weightGrams: 600
@@ -41,7 +41,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "d4e5f6a7-b8c9-4012-d345-456789abcdef", // black
         sku: "ZARA-JEAN-BLK-34",
         barcode: "2345678901235",
-        size: Size.M,
+        size: Size.M as Size,
         price: 26999,
         stock: 22,
         weightGrams: 620
@@ -52,7 +52,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "e5f6a7b8-c9da-4123-e456-56789abcdef0", // white
         sku: "ADIDAS-STAN-WHT-42",
         barcode: "3456789012345",
-        size: Size.XL,
+        size: Size.XL as Size,
         price: 89999,
         stock: 12,
         weightGrams: 800
@@ -63,7 +63,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "c3d4e5f6-a7b8-4901-c234-3456789abcde", // green
         sku: "ADIDAS-STAN-GRN-41",
         barcode: "3456789012346",
-        size: Size.M,
+        size: Size.M as Size,
         price: 89999,
         stock: 8,
         weightGrams: 780
@@ -74,7 +74,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "e5f6a7b8-c9da-4123-e456-56789abcdef0", // white
         sku: "TOMMY-OXF-WHT-M",
         barcode: "4567890123456",
-        size: Size.M,
+        size: Size.M as Size,
         price: 32999,
         stock: 20,
         weightGrams: 250
@@ -85,7 +85,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "b2c3d4e5-f6a7-4890-b123-23456789abcd", // blue
         sku: "TOMMY-OXF-BLU-L",
         barcode: "4567890123457",
-        size: Size.L,
+        size: Size.L as Size,
         price: 32999,
         stock: 16,
         weightGrams: 260
@@ -96,7 +96,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "daebfc0d-1e2f-4678-d901-abcdef012345", // gray
         sku: "HM-HOODIE-GRY-XL",
         barcode: "5678901234567",
-        size: Size.XL,
+        size: Size.XL as Size,
         price: 18999,
         stock: 30,
         weightGrams: 450
@@ -107,7 +107,7 @@ const productVariantsSeed: CreateProductVariantDto[] = [
         colorId: "a1b2c3d4-e5f6-4789-a012-123456789abc", // red
         sku: "LACOSTE-POLO-RED-M",
         barcode: "6789012345678",
-        size: Size.M,
+        size: Size.M as Size,
         price: 45999,
         stock: 14,
         weightGrams: 220

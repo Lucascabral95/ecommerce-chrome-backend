@@ -4,7 +4,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { envs } from 'src/config/env.schema';
 import { OrderBy } from 'src/orders/dto';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CartService {
@@ -74,7 +73,25 @@ export class CartService {
       const skip = (page - 1) * take;
 
       const [carts, total] = await Promise.all([
-        this.prisma.cart.findMany({ take, skip, orderBy: { createdAt: orderBy } }),
+        this.prisma.cart.findMany({
+          take,
+          skip,
+          orderBy: {
+            createdAt: orderBy
+          },
+          include: {
+            user: true,
+            items: {
+              include: {
+                variant: {
+                  include: {
+                    product: true,
+                  },
+                },
+              },
+            },
+          }
+        }),
         this.prisma.cart.count(),
       ]);
 
@@ -103,7 +120,22 @@ export class CartService {
 
   async findOne(id: string) {
     try {
-      const cart = await this.prisma.cart.findUnique({ where: { id } });
+      const cart = await this.prisma.cart.findUnique({
+        where: {
+          id
+        },
+        include: {
+          items: {
+            include: {
+              variant: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          },
+        },
+      });
 
       if (!cart) {
         throw new NotFoundException(`Cart with id: ${id} not found`);
