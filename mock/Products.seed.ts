@@ -948,7 +948,7 @@ const productsSeed: CreateProductDto[] = [
     },
     {
         id: "sad21a1-6789-40ab-asdd123-0v12adsasd34562789ab",
-        name: "traje ss100 liso slim fit azul marino",
+        name: "Traje ss100 liso slim fit azul marino",
         slug: "traje_ss100_liso_slim_fit_azul_marino",
         description: "Traje símil súper 100, con un diseño liso semi satinado en color azul marino. Con calce slim fit. El saco incluye un cuello en V, con juego de dos botones y tres bolsillos externos. Pantalón sin pinzas. De tiro medio. Incluye cuatro bolsillos dos laterales y dos traseros.  Confeccionado en 80% Poliéster y 20% Rayón. Ideal para distintas ocasiones de outfit formal.",
         brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
