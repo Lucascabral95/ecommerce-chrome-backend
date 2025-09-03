@@ -6,6 +6,7 @@ import { CreateProductDto, CreateProductImageDto, CreateProductVariantDto, Pagin
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
+  ///////
   /// Product Variant
   @Get('variant')
   findAllVariant() {

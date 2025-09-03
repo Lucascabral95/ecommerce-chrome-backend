@@ -4,6 +4,7 @@ import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { CreateAddressUserDto, CreateRolesUserDto, PaginationUserDto, UpdateAddressUserDto, UpdateRolesUserDto } from './dto';
 import { envs } from 'src/config/env.schema';
 import { Prisma } from '@prisma/client';
+import { SortOrder } from 'src/products/dto';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +12,7 @@ export class UsersService {
 
   async findAll(paginationUserDto: PaginationUserDto) {
     try {
-      const { page = 1, limit = envs.limit, name, email } = paginationUserDto;
+      const { page = 1, limit = envs.limit, name, email, orderBy = SortOrder.DESC } = paginationUserDto;
 
       const take = Math.max(1, Number(limit));
       const currentPage = Math.max(1, Number(page));
@@ -33,7 +34,7 @@ export class UsersService {
           skip,
           take,
           orderBy: {
-            createdAt: 'desc'
+            createdAt: orderBy === SortOrder.DESC ? 'desc' : 'asc'
           },
         }),
         this.prisma.user.count({ where }),

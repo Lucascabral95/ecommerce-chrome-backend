@@ -1,11 +1,11 @@
-import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateProductDto, CreateProductImageDto, CreateProductVariantDto } from './dto/create-product.dto';
 import { UpdateProductDto, UpdateProductImageDto, UpdateProductVariantDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { generateSlug } from 'src/shared/utils/generate-slug';
 import { Prisma, ProductStatus } from '@prisma/client';
-import { PaginationProductDto } from './dto';
+import { PaginationProductDto, ProductSortField, SortOrder } from './dto';
 import { envs } from 'src/config/env.schema';
 import { Size } from 'generated/prisma';
 
@@ -175,6 +175,8 @@ export class ProductsService {
         brandId,
         size,
         stock,
+        sortBy = ProductSortField.CREATED_AT,
+        sortOrder = SortOrder.DESC,
       } = paginationProductDto
 
       const take = Math.max(1, Number(limit));
@@ -202,6 +204,9 @@ export class ProductsService {
           where,
           skip,
           take,
+          orderBy: {
+            [sortBy]: sortOrder,
+          },
           include: {
             variants: true,
             images: true,

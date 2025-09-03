@@ -1,7 +1,8 @@
-import { IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+import { IsEnum, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
 import { envs } from "src/config/env.schema";
 
 import { Transform } from "class-transformer";
+import { SortOrder } from "src/products/dto";
 
 export class PaginationUserDto {
     @IsNumber()
@@ -23,4 +24,8 @@ export class PaginationUserDto {
     @IsString()
     @IsOptional()
     email?: string;
+
+    @IsEnum(SortOrder)
+    @IsOptional()
+    orderBy?: SortOrder;
 }

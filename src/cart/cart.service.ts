@@ -77,7 +77,7 @@ export class CartService {
           take,
           skip,
           orderBy: {
-            createdAt: orderBy
+            createdAt: orderBy === OrderBy.DESC ? 'desc' : 'asc'
           },
           include: {
             user: true,

@@ -3,6 +3,17 @@ import { Transform } from "class-transformer";
 import { envs } from "src/config/env.schema";
 import { ProductStatus, Size } from "@prisma/client";
 
+export enum SortOrder {
+    ASC = 'asc',
+    DESC = 'desc',
+}
+
+export enum ProductSortField {
+    PRICE = 'basePrice',
+    NAME = 'name',
+    CREATED_AT = 'createdAt'
+}
+
 export class PaginationProductDto {
     @IsNumber()
     @IsPositive()
@@ -50,4 +61,15 @@ export class PaginationProductDto {
     @IsString()
     @IsOptional()
     brandId?: string;
+
+    // Order filters
+    @IsEnum(ProductSortField)
+    @IsOptional()
+    @Transform(({ value }) => value || ProductSortField.CREATED_AT)
+    sortBy?: ProductSortField;
+
+    @IsEnum(SortOrder)
+    @IsOptional()
+    @Transform(({ value }) => value || SortOrder.DESC)
+    sortOrder?: SortOrder;
 }

@@ -166,8 +166,6 @@ export class PaymentsService {
     }
   }
 
-
-
   async handleMpPaymentNotification(paymentId: string) {
     try {
       console.log("🔔 Notificación recibida. paymentId =", paymentId);

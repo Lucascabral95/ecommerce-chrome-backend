@@ -1,26 +1,102 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
+import { handlePrismaError } from 'src/errors/handler-prisma-error';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { generateSlug } from 'src/shared/utils/generate-slug';
 
 @Injectable()
 export class BrandsService {
-  create(createBrandDto: CreateBrandDto) {
-    return 'This action adds a new brand';
+  constructor(private prisma: PrismaService) { }
+
+  async create(createBrandDto: CreateBrandDto) {
+    try {
+      const { name } = createBrandDto;
+      const slug = generateSlug(name);
+
+      const brandExists = await this.prisma.brand.findUnique({ where: { slug } });
+
+      if (brandExists) {
+        throw new BadRequestException(`Brand with slug: ${slug} already exists`);
+      }
+
+      const brand = await this.prisma.brand.create({ data: { name, slug } });
+
+      return {
+        brand: brand,
+        message: 'Brand created successfully'
+      };
+    } catch (error) {
+      if (error instanceof InternalServerErrorException || error instanceof BadRequestException || error instanceof NotFoundException) throw error;
+      handlePrismaError(error, 'Error creating brand');
+    }
   }
 
-  findAll() {
-    return `This action returns all brands`;
+  async findAll() {
+    try {
+      const brands = await this.prisma.brand.findMany();
+
+      if (!brands) {
+        throw new NotFoundException('No brands found');
+      }
+
+      return brands;
+    } catch (error) {
+      if (error instanceof InternalServerErrorException || error instanceof NotFoundException || error instanceof BadRequestException) throw error;
+      handlePrismaError(error, 'Error finding brands');
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} brand`;
+  async findOne(id: string) {
+    try {
+      const brand = await this.prisma.brand.findUnique({ where: { id } });
+
+      if (!brand) {
+        throw new NotFoundException(`Brand with id: ${id} not found`);
+      }
+
+      return brand;
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error finding brand');
+    }
   }
 
-  update(id: number, updateBrandDto: UpdateBrandDto) {
-    return `This action updates a #${id} brand`;
+  async update(id: string, updateBrandDto: UpdateBrandDto) {
+    await this.findOne(id);
+    try {
+      const { name } = updateBrandDto;
+      const slug = name && generateSlug(name);
+
+      const brand = await this.prisma.brand.update({
+        where: {
+          id
+        }, data: {
+          ...updateBrandDto,
+          slug,
+        }
+      });
+
+      return {
+        brand: brand,
+        message: 'Brand updated successfully'
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error updating brand');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} brand`;
+  async remove(id: string) {
+    await this.findOne(id);
+    try {
+      const brand = await this.prisma.brand.delete({ where: { id } });
+      return {
+        message: 'Brand removed successfully'
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error removing brand');
+    }
   }
 }
