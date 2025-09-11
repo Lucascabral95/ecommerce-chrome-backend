@@ -29,8 +29,14 @@ const productImagesSeed: CreateProductImageDto[] = [
         productId: "6f70b92d-196d-41a7-93b3-5b75979ac8e1",
     },
     {
+        id: "43893-kjfnwke2342333rwkjnfwek-wekrewjnw-wemorlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757455649/devre-sweater_60d000195-037_101_xqgz0p.webp",
+        alt: "Imagén del producto",
+        productId: "3f8c5a2e-4d7b-4285-3f8c-5a2e4d7b4285",
+    },
+    {
         id: "43893-kjfnwwerewkenewkjnfwek-wekrjnw-wemorlwijeoirw",
-        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1756856644/devre-sweater_60d000177-001_000_ihlgzx.webp",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757455444/devre-sweater_60d000177-001_000_pjokhz.webp",
         alt: "Imagén del producto",
         productId: "7b2a9f83-4d15-4e26-8c73-9a4b5e7c2d8f",
     },
@@ -135,6 +141,12 @@ const productImagesSeed: CreateProductImageDto[] = [
         url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1756857365/devre-sweater_60d000188-037_000_hgavfc.webp",
         alt: "Imagén del producto",
         productId: "4c2e8b5a-7f3d-4507-4c2e-8b5a7f3d4507",
+    },
+    {
+        id: "3f4we-34rwr3-3343w24-wemorlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757455778/devre-sweater_60d000188-002_000_lh6h6i.webp",
+        alt: "Imagén del producto",
+        productId: "8d4a7e1c-2f5b-4629-8d47-a7e1c2f5b629",
     },
     {
         id: "43893-34re3wrwee-wekrjnw-5434rrwwe",
@@ -319,7 +331,73 @@ const productImagesSeed: CreateProductImageDto[] = [
         id: "43893-kjfnwkenewkjnfwek-94835iojorw-wemorlwijeoirw",
         url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1756858405/devre-remera_55d000036-008_000_vnpobf.webp",
         alt: "Imagén del producto",
+        productId: "f0a9c3b2-6d1e-4f8a-9wb20-2342sdfsdww",
+    },
+    {
+        id: "42423645456893-kjfnwkenewkjnfwek-94835iojorw-6456546",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757457649/devre-remera_55d000037-055_000_eq0cwv.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9wec3b2-6drwe1e-4f8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42423893-654456-94835iojorw-wemorlwije654oirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757457662/devre-remera_55d000037-081_000_vooneh.webp",
+        alt: "Imagén del producto",
         productId: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42564564423893-kjf546546nwkenewkjnfwek-94835iojorw-wemorlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757457669/devre-remera_55d000034-037_000_gxvsu5.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9c3b2-6d1wewee-4f8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42423654564893-655466544-948356455iojorw-wemo564564rlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757457863/devre-remera_55d000035-005_000_e9pifk.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9cwre3b2-6d1e-4werf8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42423893-46565465-94835io654546jorw-wemo456645rlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757457871/devre-remera_55d000034-009_000_bgx9gt.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9c3b2-6d1e-4fwe8a-9b20-ewrwerew",
+    },
+    {
+        id: "42423864545693-kjfnwkenewkjnfwek-94835iojorw-5654654",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757457878/devre-remera_55d000034-006_000_krnmjx.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9c3b2-6d1e-4f8a-ewrwerew-2342sdfsdww",
+    },
+    {
+        id: "42423893-54-94835i6545ojorw-wemorlw65ijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757458134/devre-remera_55d000033-009_000_t7n6ck.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9c3b2-ewrwerew-4f8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42425463893-kjf654n645wkenewkjnfwek-95464835iojorw-wemorlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757458237/devre-remera_55d000034-117_000_xgki5o.webp",
+        alt: "Imagén del producto",
+        productId: "ewrwerew-6d1e-4f8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42423893-kjfnwk546enewkjnfwek-94835iojorw-wemorlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757458247/devre-remera_55d000033-003_000_cl9ect.webp",
+        alt: "Imagén del producto",
+        productId: "ewr-6d1e-4f8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42423893-kjfn654wkenewkjnfwek-94835iojo64rw-wem46orlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757458256/devre-remera_55d000034-002_000_fanw9u.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9c3b2-ewr-4f8a-9b20-2342sdfsdww",
+    },
+    {
+        id: "42423893-kjfnwkenewk54465jnfwek-94864535iojorw-wemorlwijeoirw",
+        url: "https://res.cloudinary.com/dywcuco2r/image/upload/v1757458263/devre-remera_55d000021-017_002_gwxjwc.webp",
+        alt: "Imagén del producto",
+        productId: "f0a9c3b2-6d1e-ewr-9b20-2342swwdfsdww",
     },
     // JEANS
     // JEANS

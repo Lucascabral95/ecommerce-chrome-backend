@@ -10,19 +10,19 @@ const usersSeed: RegisterAuthDto[] = [
     {
         "id": "569ad29f-e8a6-4f2b-b7a5-8f84dca33d7a",
         "email": "carlos.rodriguez@example.com",
-        "hashedPassword": "123456",
+        "hashedPassword": "Nest.nest1",
         "name": "Carlos Rodríguez"
     },
     {
         "id": "3ed4f891-022f-44c5-999a-84721a374414",
         "email": "ana.martinez@example.com",
-        "hashedPassword": "123456",
+        "hashedPassword": "Nest.nest1",
         "name": "Ana Martínez"
     },
     {
         "id": "e4e382bc-225b-4a73-8069-69577df9b10a",
         "email": "juan.perez@example.com",
-        "hashedPassword": "123456",
+        "hashedPassword": "Nest.nest1",
         "name": "Juan Pérez"
     }
 ]

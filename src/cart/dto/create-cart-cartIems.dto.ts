@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString, Min } from "class-validator";
 
 export class CreateCartDto {
     @IsString()
@@ -26,8 +26,11 @@ export class CartItemDto {
     variantId: string;
 
     @IsNumber()
+    @Min(1)
     quantity: number;
 
     @IsNumber()
-    unitPriceSnap: number;
+    @Min(0)
+    @IsOptional()
+    unitPriceSnap?: number;
 }

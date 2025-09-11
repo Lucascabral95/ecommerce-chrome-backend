@@ -57,9 +57,6 @@ export class PaymentsController {
     return { ok: true };
   }
 
-
-
-
   @Get('pending')
   pending(@Query() q: any) {
     return { status: 'pending', q };

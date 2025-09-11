@@ -1,6 +1,6 @@
 import { Currency, OrderStatus, Size } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, IsOptional, ValidateNested } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, IsOptional, ValidateNested, Min, IsObject } from "class-validator";
 
 
 // BillingAddress 
@@ -41,7 +41,6 @@ export class CreateOrderDto {
     id?: string;
 
     @IsString()
-    @IsNotEmpty()
     userId: string;
 
     @IsEnum(OrderStatus)
@@ -74,10 +73,12 @@ export class CreateOrderDto {
 
     @Type(() => ShippingAddress)
     @ValidateNested({ each: true })
+    @IsObject()
     shippingAddress: ShippingAddress;
 
     @Type(() => BillingAddress)
     @ValidateNested({ each: true })
+    @IsObject()
     @IsOptional()
     billingAddress?: BillingAddress;
 
@@ -101,10 +102,12 @@ export class CreateOrderItemDto {
 
     @IsNumber()
     @IsPositive()
+    @Min(1)
     quantity: number
 
     @IsNumber()
     @IsPositive()
+    @Min(0)
     unitPrice: number
 
     @IsString()

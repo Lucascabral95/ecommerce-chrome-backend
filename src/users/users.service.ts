@@ -5,6 +5,7 @@ import { CreateAddressUserDto, CreateRolesUserDto, PaginationUserDto, UpdateAddr
 import { envs } from 'src/config/env.schema';
 import { Prisma } from '@prisma/client';
 import { SortOrder } from 'src/products/dto';
+import { first } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -84,7 +85,54 @@ export class UsersService {
     }
   }
 
-  // Addresss
+  // Addresses
+  async getAddressesById(userId: string) {
+    try {
+      const [address, total] = await Promise.all([
+        this.prisma.address.findMany({
+          where: {
+            userId,
+          },
+        }),
+        this.prisma.address.count({ where: { userId } })
+      ]);
+
+      if (!address) {
+        throw new NotFoundException(`Address with user id: ${userId} not found`);
+      }
+
+      return {
+        addressCount: total,
+        firstAddress: address[0],
+        addresses: address,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error finding address');
+    }
+  }
+
+  async deleteAddress(addressId: string) {
+    try {
+      const findAddress = await this.prisma.address.findUnique({
+        where: {
+          id: addressId
+        }
+      });
+
+      if (!findAddress) {
+        throw new NotFoundException(`Address with id: ${addressId} not found`);
+      }
+
+      await this.prisma.address.delete({ where: { id: addressId } });
+
+      return 'Address deleted successfully';
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error deleting address');
+    }
+  }
+
   async createAddress(userId: string, createAddressDto: CreateAddressUserDto) {
     await this.findOne(userId);
 
@@ -104,11 +152,11 @@ export class UsersService {
   }
 
   async updateAddress(userId: string, updateAddressDto: UpdateAddressUserDto) {
-    await this.findOne(userId);
-
     try {
       const existingAddress = await this.prisma.address.findFirst({
-        where: { userId: userId }
+        where: {
+          userId: userId
+        }
       });
 
       if (!existingAddress) {
@@ -116,7 +164,9 @@ export class UsersService {
       }
 
       const address = await this.prisma.address.update({
-        where: { id: existingAddress.id },
+        where: {
+          id: existingAddress.id
+        },
         data: updateAddressDto
       });
 

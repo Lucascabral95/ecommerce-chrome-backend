@@ -101,13 +101,17 @@ export class AppService {
         })),
       });
 
-      await this.prisma.user.createMany({
-        data: usersSeed.map(user => ({
+      const usersWithHashedPasswords = await Promise.all(
+        usersSeed.map(async (user) => ({
           id: user.id,
           name: user.name,
           email: user.email,
-          hashedPassword: user.hashedPassword,
+          hashedPassword: await hashPassword(user.hashedPassword),
         })),
+      );
+
+      await this.prisma.user.createMany({
+        data: usersWithHashedPasswords,
       });
 
       await this.prisma.userRole.createMany({
@@ -225,7 +229,7 @@ export class AppService {
           cartId: cartItem.cartId,
           variantId: cartItem.variantId,
           quantity: cartItem.quantity,
-          unitPriceSnap: cartItem.unitPriceSnap,
+          unitPriceSnap: cartItem.unitPriceSnap ?? 0,
         })),
       });
 

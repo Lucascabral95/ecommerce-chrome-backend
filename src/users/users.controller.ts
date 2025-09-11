@@ -4,7 +4,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateAddressUserDto, CreateRolesUserDto, PaginationUserDto, UpdateAddressUserDto, UpdateRolesUserDto } from './dto';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
@@ -24,9 +24,19 @@ export class UsersController {
     return this.usersService.createAddress(id, createAddressDto);
   }
 
-  @Patch(':id/address')
-  updateAddress(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressUserDto) {
-    return this.usersService.updateAddress(id, updateAddressDto);
+  @Get(':id/address')
+  getAddressesById(@Param('id') id: string) {
+    return this.usersService.getAddressesById(id);
+  }
+
+  @Delete(':addressId/address')
+  deleteAddressesById(@Param('addressId') addressId: string) {
+    return this.usersService.deleteAddress(addressId);
+  }
+
+  @Patch(':userId/address')
+  updateAddress(@Param('userId') userId: string, @Body() updateAddressDto: UpdateAddressUserDto) {
+    return this.usersService.updateAddress(userId, updateAddressDto);
   }
 
   // Roles 
@@ -39,5 +49,4 @@ export class UsersController {
   updateRole(@Param('id') id: string, @Body() updateRoleDto: UpdateRolesUserDto) {
     return this.usersService.updateRole(id, updateRoleDto);
   }
-
 }

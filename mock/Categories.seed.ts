@@ -13,7 +13,7 @@ const categoriesSeed: CreateCategoryDto[] = [
     },
     {
         "id": "3c4d5e6f-7a8b-4901-c234-3456789abcde",
-        "name": "Rameras Manga Larga", // POBLADO
+        "name": "Rameras Manga Larga", // NO POBLADO!
         "slug": "remeras_manga_larga",
     },
     {

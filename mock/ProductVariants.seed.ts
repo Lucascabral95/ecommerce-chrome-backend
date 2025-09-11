@@ -248,6 +248,61 @@ const productVariantsSeed: CreateProductVariantDto[] = [
     { id: "ad5e6f70-1b2c-4d3e-8f98-1a2b3c4d5e74", productId: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-FLM-VER-L", barcode: "7790000022102", size: Size.L as Size, price: 299990, stock: 22, weightGrams: 280 },
     { id: "be6f7081-2c3d-4e4f-9a07-2b3c4d5e6f75", productId: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-FLM-VER-XL", barcode: "7790000022103", size: Size.XL as Size, price: 299990, stock: 18, weightGrams: 300 },
 
+    // Remera jersey estampada verde malva -> Verde
+    { id: "a1010001-1111-4aa1-8a01-000000000101", productId: "f0a9wec3b2-6drwe1e-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-JRS-VER-M", barcode: "7790000201001", size: Size.M as Size, price: 39990, stock: 24, weightGrams: 260 },
+    { id: "a1010002-1111-4aa2-8a02-000000000102", productId: "f0a9wec3b2-6drwe1e-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-JRS-VER-L", barcode: "7790000201002", size: Size.L as Size, price: 39990, stock: 20, weightGrams: 280 },
+    { id: "a1010003-1111-4aa3-8a03-000000000103", productId: "f0a9wec3b2-6drwe1e-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-JRS-VER-XL", barcode: "7790000201003", size: Size.XL as Size, price: 39990, stock: 16, weightGrams: 300 },
+
+    // Remera jersey estampada azulino -> Azul
+    { id: "a1020001-2222-4bb1-8b01-000000000201", productId: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww", colorId: "37c4f3ea-5f11-4b1d-9a62-2d9e84f5bc14", sku: "RMR-JRS-AZU-M", barcode: "7790000201101", size: Size.M as Size, price: 39990, stock: 22, weightGrams: 258 },
+    { id: "a1020002-2222-4bb2-8b02-000000000202", productId: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww", colorId: "37c4f3ea-5f11-4b1d-9a62-2d9e84f5bc14", sku: "RMR-JRS-AZU-L", barcode: "7790000201102", size: Size.L as Size, price: 39990, stock: 19, weightGrams: 278 },
+    { id: "a1020003-2222-4bb3-8b03-000000000203", productId: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww", colorId: "37c4f3ea-5f11-4b1d-9a62-2d9e84f5bc14", sku: "RMR-JRS-AZU-XL", barcode: "7790000201103", size: Size.XL as Size, price: 39990, stock: 15, weightGrams: 298 },
+
+    // Remera lisa flamé gris claro -> Gris Claro
+    { id: "a1030001-3333-4cc1-8c01-000000000301", productId: "f0a9c3b2-6d1wewee-4f8a-9b20-2342sdfsdww", colorId: "7b08372e-9355-4f51-9ea6-61d2c8j9f058", sku: "RMR-FLM-GRC-M", barcode: "7790000201201", size: Size.M as Size, price: 39990, stock: 26, weightGrams: 255 },
+    { id: "a1030002-3333-4cc2-8c02-000000000302", productId: "f0a9c3b2-6d1wewee-4f8a-9b20-2342sdfsdww", colorId: "7b08372e-9355-4f51-9ea6-61d2c8j9f058", sku: "RMR-FLM-GRC-L", barcode: "7790000201202", size: Size.L as Size, price: 39990, stock: 22, weightGrams: 275 },
+    { id: "a1030003-3333-4cc3-8c03-000000000303", productId: "f0a9c3b2-6d1wewee-4f8a-9b20-2342sdfsdww", colorId: "7b08372e-9355-4f51-9ea6-61d2c8j9f058", sku: "RMR-FLM-GRC-XL", barcode: "7790000201203", size: Size.XL as Size, price: 39990, stock: 18, weightGrams: 295 },
+
+    // Remera lisa flamé tostada -> Tostado
+    { id: "a1040001-4444-4dd1-8d01-000000000401", productId: "f0a9cwre3b2-6d1e-4werf8a-9b20-2342sdfsdww", colorId: "bf4c7b62-d799-4355-9ie0-a5h60c3d349c", sku: "RMR-FLM-TOS-M", barcode: "7790000201301", size: Size.M as Size, price: 39990, stock: 24, weightGrams: 260 },
+    { id: "a1040002-4444-4dd2-8d02-000000000402", productId: "f0a9cwre3b2-6d1e-4werf8a-9b20-2342sdfsdww", colorId: "bf4c7b62-d799-4355-9ie0-a5h60c3d349c", sku: "RMR-FLM-TOS-L", barcode: "7790000201302", size: Size.L as Size, price: 39990, stock: 21, weightGrams: 280 },
+    { id: "a1040003-4444-4dd3-8d03-000000000403", productId: "f0a9cwre3b2-6d1e-4werf8a-9b20-2342sdfsdww", colorId: "bf4c7b62-d799-4355-9ie0-a5h60c3d349c", sku: "RMR-FLM-TOS-XL", barcode: "7790000201303", size: Size.XL as Size, price: 39990, stock: 17, weightGrams: 300 },
+
+    // Remera lisa flamé verde -> Verde
+    { id: "a1050001-5555-4ee1-8e01-000000000501", productId: "f0a9c3b2-6d1e-4fwe8a-9b20-ewrwerew", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-FLM-VER-M", barcode: "7790000201401", size: Size.M as Size, price: 39990, stock: 24, weightGrams: 260 },
+    { id: "a1050002-5555-4ee2-8e02-000000000502", productId: "f0a9c3b2-6d1e-4fwe8a-9b20-ewrwerew", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-FLM-VER-L", barcode: "7790000201402", size: Size.L as Size, price: 39990, stock: 22, weightGrams: 280 },
+    { id: "a1050003-5555-4ee3-8e03-000000000503", productId: "f0a9c3b2-6d1e-4fwe8a-9b20-ewrwerew", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-FLM-VER-XL", barcode: "7790000201403", size: Size.XL as Size, price: 39990, stock: 18, weightGrams: 300 },
+
+    // Remera lisa flamé acero -> Gris Oscuro
+    { id: "a1060001-6666-4ff1-8f01-000000000601", productId: "f0a9c3b2-6d1e-4f8a-ewrwerew-2342sdfsdww", colorId: "59e6150c-7133-4d3f-9c84-4fb0a6h7de36", sku: "RMR-FLM-GRO-M", barcode: "7790000201501", size: Size.M as Size, price: 39990, stock: 23, weightGrams: 262 },
+    { id: "a1060002-6666-4ff2-8f02-000000000602", productId: "f0a9c3b2-6d1e-4f8a-ewrwerew-2342sdfsdww", colorId: "59e6150c-7133-4d3f-9c84-4fb0a6h7de36", sku: "RMR-FLM-GRO-L", barcode: "7790000201502", size: Size.L as Size, price: 39990, stock: 20, weightGrams: 282 },
+    { id: "a1060003-6666-4ff3-8f03-000000000603", productId: "f0a9c3b2-6d1e-4f8a-ewrwerew-2342sdfsdww", colorId: "59e6150c-7133-4d3f-9c84-4fb0a6h7de36", sku: "RMR-FLM-GRO-XL", barcode: "7790000201503", size: Size.XL as Size, price: 39990, stock: 16, weightGrams: 302 },
+
+    // Remera lisa piqué verde -> Verde (basePrice 25990)
+    { id: "a1070001-7777-4001-9001-000000000701", productId: "f0a9c3b2-ewrwerew-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-PIQ-VER-M", barcode: "7790000201601", size: Size.M as Size, price: 25990, stock: 28, weightGrams: 255 },
+    { id: "a1070002-7777-4002-9002-000000000702", productId: "f0a9c3b2-ewrwerew-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-PIQ-VER-L", barcode: "7790000201602", size: Size.L as Size, price: 25990, stock: 25, weightGrams: 275 },
+    { id: "a1070003-7777-4003-9003-000000000703", productId: "f0a9c3b2-ewrwerew-4f8a-9b20-2342sdfsdww", colorId: "4b5a6c7d-8e9f-4012-a3b4-c5d6e7f80123", sku: "RMR-PIQ-VER-XL", barcode: "7790000201603", size: Size.XL as Size, price: 25990, stock: 21, weightGrams: 295 },
+
+    // Remera lisa flamé blanca -> Blanco
+    { id: "a1080001-8888-4111-9111-000000000801", productId: "ewrwerew-6d1e-4f8a-9b20-2342sdfsdww", colorId: "15a2d1c8-3def-4f9b-9e40-0b7c62d38fa2", sku: "RMR-FLM-BLA-M", barcode: "7790000201701", size: Size.M as Size, price: 39990, stock: 26, weightGrams: 258 },
+    { id: "a1080002-8888-4112-9112-000000000802", productId: "ewrwerew-6d1e-4f8a-9b20-2342sdfsdww", colorId: "15a2d1c8-3def-4f9b-9e40-0b7c62d38fa2", sku: "RMR-FLM-BLA-L", barcode: "7790000201702", size: Size.L as Size, price: 39990, stock: 22, weightGrams: 278 },
+    { id: "a1080003-8888-4113-9113-000000000803", productId: "ewrwerew-6d1e-4f8a-9b20-2342sdfsdww", colorId: "15a2d1c8-3def-4f9b-9e40-0b7c62d38fa2", sku: "RMR-FLM-BLA-XL", barcode: "7790000201703", size: Size.XL as Size, price: 39990, stock: 18, weightGrams: 298 },
+
+    // Remera lisa piqué gris oscuro -> Gris Oscuro (basePrice 25990)
+    { id: "a1090001-9999-4222-9222-000000000901", productId: "ewr-6d1e-4f8a-9b20-2342sdfsdww", colorId: "59e6150c-7133-4d3f-9c84-4fb0a6h7de36", sku: "RMR-PIQ-GRO-M", barcode: "7790000201801", size: Size.M as Size, price: 25990, stock: 27, weightGrams: 255 },
+    { id: "a1090002-9999-4223-9223-000000000902", productId: "ewr-6d1e-4f8a-9b20-2342sdfsdww", colorId: "59e6150c-7133-4d3f-9c84-4fb0a6h7de36", sku: "RMR-PIQ-GRO-L", barcode: "7790000201802", size: Size.L as Size, price: 25990, stock: 24, weightGrams: 275 },
+    { id: "a1090003-9999-4224-9224-000000000903", productId: "ewr-6d1e-4f8a-9b20-2342sdfsdww", colorId: "59e6150c-7133-4d3f-9c84-4fb0a6h7de36", sku: "RMR-PIQ-GRO-XL", barcode: "7790000201803", size: Size.XL as Size, price: 25990, stock: 20, weightGrams: 295 },
+
+    // Remera lisa flamé negra -> Negro
+    { id: "a10a0001-aaaa-4333-9333-000000001001", productId: "f0a9c3b2-ewr-4f8a-9b20-2342sdfsdww", colorId: "04f1c0b7-2cde-4e8a-8d3f-9a6b51c27e91", sku: "RMR-FLM-NEG-M", barcode: "7790000201901", size: Size.M as Size, price: 39990, stock: 30, weightGrams: 262 },
+    { id: "a10a0002-aaaa-4334-9334-000000001002", productId: "f0a9c3b2-ewr-4f8a-9b20-2342sdfsdww", colorId: "04f1c0b7-2cde-4e8a-8d3f-9a6b51c27e91", sku: "RMR-FLM-NEG-L", barcode: "7790000201902", size: Size.L as Size, price: 39990, stock: 26, weightGrams: 282 },
+    { id: "a10a0003-aaaa-4335-9335-000000001003", productId: "f0a9c3b2-ewr-4f8a-9b20-2342sdfsdww", colorId: "04f1c0b7-2cde-4e8a-8d3f-9a6b51c27e91", sku: "RMR-FLM-NEG-XL", barcode: "7790000201903", size: Size.XL as Size, price: 39990, stock: 22, weightGrams: 302 },
+
+    // Remera flame con bolsillo blanca -> Blanco (basePrice 25990)
+    { id: "a10b0001-bbbb-4444-9444-000000001101", productId: "f0a9c3b2-6d1e-ewr-9b20-2342swwdfsdww", colorId: "15a2d1c8-3def-4f9b-9e40-0b7c62d38fa2", sku: "RMR-FLM-BLA-M", barcode: "7790000202001", size: Size.M as Size, price: 25990, stock: 28, weightGrams: 255 },
+    { id: "a10b0002-bbbb-4445-9445-000000001102", productId: "f0a9c3b2-6d1e-ewr-9b20-2342swwdfsdww", colorId: "15a2d1c8-3def-4f9b-9e40-0b7c62d38fa2", sku: "RMR-FLM-BLA-L", barcode: "7790000202002", size: Size.L as Size, price: 25990, stock: 25, weightGrams: 275 },
+    { id: "a10b0003-bbbb-4446-9446-000000001103", productId: "f0a9c3b2-6d1e-ewr-9b20-2342swwdfsdww", colorId: "15a2d1c8-3def-4f9b-9e40-0b7c62d38fa2", sku: "RMR-FLM-BLA-XL", barcode: "7790000202003", size: Size.XL as Size, price: 25990, stock: 21, weightGrams: 295 },
+
     // JEANS
     // JEANS
     // JEANS

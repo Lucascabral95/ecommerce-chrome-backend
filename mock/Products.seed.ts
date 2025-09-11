@@ -532,20 +532,132 @@ const productsSeed: CreateProductDto[] = [
         slug: "remera_lisa_flame_terracota",
         description: "Remera manga larga flamé con diseño liso y bolsillo al frente, en color terracota y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
         brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-        categoryId: "6f7a8b9c-0d1e-4234-f567-6789abcdef01",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
         basePrice: 299990,
         status: "ACTIVE"
     },
     {
-        id: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww",
+        id: "f0a9c3b2-6d1e-4f8a-9wb20-2342sdfsdww",
         name: "Remera lisa flamé verde oscuro",
         slug: "remera_lisa_flame_verde_oscuro",
         description: "Remera manga larga flamé con diseño liso y bolsillo al frente, en color verde oscuro y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
         brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-        categoryId: "6f7a8b9c-0d1e-4234-f567-6789abcdef01",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
         basePrice: 29990,
         status: "ACTIVE"
     },
+    // Nuevas remeras agregadas (09/09/25)
+    {
+        id: "f0a9wec3b2-6drwe1e-4f8a-9b20-2342sdfsdww",
+        name: "Remera jersey estampada verde malva",
+        slug: "remera_jersey_estampada_verde_malva",
+        description: "Remera manga larga en jersey con diseño estampado en color verde malva. Cuello redondo y calce regular fit. Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9c3b2-6d1e-4f8a-9b20-2342sdfsdww",
+        name: "Remera jersey estampada azulino",
+        slug: "remera-jersey_estampada_azulino",
+        description: "Remera manga larga en jersey con diseño estampado en color azulino. Cuello redondo y calce regular fit. Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9c3b2-6d1wewee-4f8a-9b20-2342sdfsdww",
+        name: "Remera lisa flamé gris claro",
+        slug: "remera_lisa_flame_gris_claro",
+        description: "Remera manga larga flamé con diseño liso y bolsillo al frente, en color gris claro y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9cwre3b2-6d1e-4werf8a-9b20-2342sdfsdww",
+        name: "Remera lisa flamé tostada",
+        slug: "remera_lisa_flame_tostada",
+        description: "Remera manga larga flamé con diseño liso y bordado al frente, en color tostado y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9c3b2-6d1e-4fwe8a-9b20-ewrwerew",
+        name: "Remera lisa flamé verde",
+        slug: "remera_lisa_flame_verde",
+        description: "Remera manga larga flamé con diseño liso y bordado al frente, en color verde y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9c3b2-6d1e-4f8a-ewrwerew-2342sdfsdww",
+        name: "Remera lisa flamé acero",
+        slug: "remera_lisa_flame_acero",
+        description: "Remera manga larga flamé con diseño liso y bordado al frente, en color acero y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9c3b2-ewrwerew-4f8a-9b20-2342sdfsdww",
+        name: "Remera lisa piqué verde",
+        slug: "remera_lisa_pique_verde",
+        description: "Remera manga larga en piqué con diseño liso en color verde. Cuello redondo con vivo combinado. De calce regular fit. Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 25990,
+        status: "ACTIVE"
+    },
+    {
+        id: "ewrwerew-6d1e-4f8a-9b20-2342sdfsdww",
+        name: "Remera lisa flamé blanca",
+        slug: "remera_lisa_flame_blanca",
+        description: "Remera manga larga flamé con diseño liso y bordado al frente, en color blanco y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "ewr-6d1e-4f8a-9b20-2342sdfsdww",
+        name: "Remera lisa piqué gris oscuro",
+        slug: "remera_lisa_pique_gris_oscuro",
+        description: "Remera manga larga en piqué con diseño liso en color gris oscuro. Cuello redondo con vivo combinado. De calce regular fit. Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 25990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9c3b2-ewr-4f8a-9b20-2342sdfsdww",
+        name: "Remera lisa flamé negra",
+        slug: "remera_lisa_flame_negra",
+        description: "Remera manga larga flamé con diseño liso y bordado al frente, en color negro y escote redondo. De calce regular fit . Confeccionada con 100% algodón. Ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 39990,
+        status: "ACTIVE"
+    },
+    {
+        id: "f0a9c3b2-6d1e-ewr-9b20-2342swwdfsdww",
+        name: "Remera flame con bolsillo blanca",
+        slug: "remera_flame_con_bolsillo_blanca",
+        description: "Remera manga larga flame con bolsillo externo de escote redondo color blanca. de calce regular. confeccionada con 100% de algodón. ideal para combinar con un look casual.",
+        brandId: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        categoryId: "3c4d5e6f-7a8b-4901-c234-3456789abcde",
+        basePrice: 25990,
+        status: "ACTIVE"
+    },
+    // Nuevas remeras agregadas (09/09/25)
 
     // JEANS
     // JEANS
