@@ -1,16 +1,20 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { CreateOrderDto, OrderBy, PaginationOrderDto, UpdateOrderDto } from './dto';
+import { CreateOrderDto, OrderBy, PaginationOrderDto, PaginationOrderUserIdDto, UpdateOrderDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { Currency, Prisma } from '@prisma/client';
 import { envs } from 'src/config/env.schema';
+import { PaymentsService } from 'src/payments/payments.service';
 
 const TIMEOUT_TRANSAC = envs.minutes_to_cancel_order;
 
 @Injectable()
 export class OrdersService {
   private orderTimeouts = new Map<string, NodeJS.Timeout>();
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly paymentsService: PaymentsService,
+  ) { }
 
   async createOrder(userId: string, dto: CreateOrderDto) {
     // Primero ejecutar la transacción
@@ -47,7 +51,7 @@ export class OrdersService {
       });
 
       if (existingPendingOrder) {
-        throw new BadRequestException('Ya tienes una orden pendiente. Completa o cancela la orden anterior.');
+        throw new BadRequestException('Ya tenés una orden pendiente. Completá o cancelá la orden anterior.');
       }
 
       // 3. Validar stock y reservar
@@ -74,7 +78,10 @@ export class OrdersService {
       const discount = dto.discount || 0;
       const total = subtotal + shipping - discount;
 
-      // 5. Crear la orden
+      // 5. Crear preferencia de pago 
+      const createPayments = await this.paymentsService.createPreference(userId);
+
+      // 6. Crear la orden
       const order = await tx.order.create({
         data: {
           userId: userId,
@@ -84,6 +91,7 @@ export class OrdersService {
           shipping,
           tax: 0,
           discount,
+          mpPreferenceId: createPayments.init_point,
           total,
           shippingAddress: dto.shippingAddress as any,
           billingAddress: dto.billingAddress || dto.shippingAddress as any,
@@ -102,7 +110,7 @@ export class OrdersService {
         }
       });
 
-      // 6. Crear OrderItems
+      // 7. Crear OrderItems
       for (const cartItem of cart.items) {
         await tx.orderItem.create({
           data: {
@@ -118,9 +126,10 @@ export class OrdersService {
         });
       }
 
-      // 7. Crear Payment pendiente
+      // 8. Crear Payment pendiente
       await tx.payment.create({
         data: {
+          id: createPayments.externalReference,
           orderId: order.id,
           provider: 'MERCADOPAGO',
           status: 'PENDING',
@@ -129,7 +138,7 @@ export class OrdersService {
         }
       });
 
-      // 8. NO limpiar carrito aún (se limpia cuando se confirma el pago)
+      // 9. NO limpiar carrito aún (se limpia cuando se confirma el pago)
       // await tx.cartItem.deleteMany({
       //   where: { cartId: cart.id }
       // });
@@ -137,12 +146,11 @@ export class OrdersService {
       return order;
     });
 
-    // 9. DESPUÉS de la transacción exitosa, programar cancelación automática
+    // 10. DESPUÉS de la transacción exitosa, programar cancelación automática
     this.programarCancelacionAutomatica(order.id);
     return order;
   }
 
-  // Método auxiliar para programar la cancelación
   private programarCancelacionAutomatica(orderId: string): void {
     const timeoutId = setTimeout(async () => {
 
@@ -199,25 +207,6 @@ export class OrdersService {
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-  ////////////////////////////
-  ////////////////////////////
-  ////////////////////////////
-  ////////////////////////////
-  ////////////////////////////
-  ////////////////////////////
-  ////////////////////////////
-  ////////////////////////////
-  ////////////////////////////
   ////////////////////////////
   async findAll(paginationOrderDto: PaginationOrderDto) {
     try {
@@ -273,19 +262,36 @@ export class OrdersService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(orderId: string) {
     try {
+      const result = {
+        include: {
+          items: {
+            include: {
+              variant: {
+                include: {
+                  product: {
+                    select: {
+                      id: true,
+                      images: true,
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+      }
+
       const orderById = await this.prisma.order.findFirst({
         where: {
-          id: id,
+          id: orderId,
         },
-        include: {
-          items: true,
-        },
+        include: result.include,
       });
 
       if (!orderById) {
-        throw new NotFoundException(`Order with id: ${id} not found`);
+        throw new NotFoundException(`Order with id: ${orderId} not found`);
       }
 
       return orderById;
@@ -294,6 +300,82 @@ export class OrdersService {
         throw error;
       }
       handlePrismaError(error, 'Error finding order');
+    }
+  }
+
+  async findAllByUserId(userId: string, paginationOrderUserIdDto: PaginationOrderUserIdDto) {
+    try {
+      const {
+        page = 1,
+        limit = envs.limit,
+        status,
+        orderBy = OrderBy.DESC
+      } = paginationOrderUserIdDto;
+
+      const result = {
+        include: {
+          items: {
+            include: {
+              variant: {
+                include: {
+                  product: {
+                    select: {
+                      id: true,
+                      images: true,
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+      }
+
+      const take = limit + 1;
+      const skip = (page - 1) * limit;
+
+      const where: Prisma.OrderWhereInput = {
+        userId: userId,
+        ...(status && { status }),
+      };
+
+      const orderOfUser = await this.prisma.order.findMany({
+        where,
+        take,
+        skip,
+        include: result.include,
+        orderBy: {
+          createdAt: orderBy === OrderBy.DESC ? 'desc' : 'asc',
+        },
+      });
+
+      const [orders, totalOrders] = await Promise.all([
+        this.prisma.order.findMany({
+          take,
+          skip,
+          where,
+          orderBy: {
+            createdAt: orderBy === OrderBy.DESC ? 'desc' : 'asc',
+          },
+        }),
+        this.prisma.order.count({ where }),
+      ]);
+
+      const prevPage = page > 1 ? true : false;
+      const nextPage = orders.length > limit - 1 ? true : false;
+
+      return {
+        total: totalOrders,
+        totalPages: Math.ceil(totalOrders / limit),
+        prevPage,
+        nextPage,
+        page,
+        limit,
+        orders: orderOfUser,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error finding orders by user');
     }
   }
 

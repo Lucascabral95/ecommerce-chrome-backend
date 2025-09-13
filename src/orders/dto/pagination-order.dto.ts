@@ -42,4 +42,26 @@ export class PaginationOrderDto {
     @IsOptional()
     @IsEnum(OrderBy)
     orderBy?: OrderBy;
-}   
+}
+
+export class PaginationOrderUserIdDto {
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    @Transform(({ value }) => Number(value) || 1)
+    page?: number;
+
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    @Transform(({ value }) => Number(value) || envs.limit)
+    limit?: number;
+
+    @IsOptional()
+    @IsEnum(OrderStatus)
+    status?: OrderStatus;
+
+    @IsOptional()
+    @IsEnum(OrderBy)
+    orderBy?: OrderBy;
+}

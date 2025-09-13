@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto, PaginationOrderDto, UpdateOrderDto } from './dto';
+import { CreateOrderDto, PaginationOrderDto, PaginationOrderUserIdDto, UpdateOrderDto } from './dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -14,6 +14,11 @@ export class OrdersController {
   @Get()
   findAll(@Query() paginationOrderDto: PaginationOrderDto) {
     return this.ordersService.findAll(paginationOrderDto);
+  }
+
+  @Get('/user/:userId')
+  findAllByUserId(@Param('userId') userId: string, @Query() paginationOrderUserIdDto: PaginationOrderUserIdDto) {
+    return this.ordersService.findAllByUserId(userId, paginationOrderUserIdDto);
   }
 
   @Get(':orderId')

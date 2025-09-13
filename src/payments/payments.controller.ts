@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Query, Req } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { PaginationPaymentDto } from './dto';
-import { Response, Request } from 'express';
+import { Request } from 'express';
 
 @Controller('payments')
 export class PaymentsController {
@@ -17,26 +17,16 @@ export class PaymentsController {
     return this.paymentsService.createPreference(userId);
   }
 
-  @Post('mp/webhook')
-  async mpWebhook(@Req() req: Request, @Res() res: Response) {
-    try {
-      const body: any = req.body;
+  @Post('webhook')
+  @HttpCode(200)
+  async handleWebhook(@Req() req: Request) {
+    return this.paymentsService.handleWebhook(req.body);
+  }
 
-      if (body?.type === 'payment' && body?.data?.id) {
-        const paymentId = String(body.data.id);
-
-        await this.paymentsService.handleMpPaymentNotification(paymentId);
-
-        console.log('✅ Webhook MP procesado', { paymentId });
-
-        return res.status(200).send('ok');
-      }
-
-      return res.status(200).send('ignored');
-    } catch (e) {
-      console.error('Error en webhook MP', e);
-      return res.status(200).send('ok');
-    }
+  @Get('test')
+  test() {
+    console.log('Estas es prueba de que los cambios surgieron efecto');
+    return { message: 'Test OK' };
   }
 
   @Get('mp/success')
@@ -45,24 +35,15 @@ export class PaymentsController {
     const status = q.status;
     console.log('Retorno de éxito MP', { paymentId, status });
 
-    // if (paymentId) {
-    //   const updated = await this.paymentsService.confirmMpPayment(paymentId);
-    //   if (updated?.approved) {
-    //     console.log('Pago aprobado ✔️ (callback)', {
-    //       paymentId,
-    //       status_detail: updated.status_detail,
-    //     });
-    //   }
-    // }
-    return { ok: true };
+    return { ok: 'Payment success' };
   }
 
-  @Get('pending')
+  @Get('mp/pending')
   pending(@Query() q: any) {
     return { status: 'pending', q };
   }
 
-  @Get('failure')
+  @Get('mp/failure')
   failure(@Query() q: any) {
     return { status: 'failure', q };
   }
