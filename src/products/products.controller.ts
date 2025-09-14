@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto, CreateProductImageDto, CreateProductVariantDto, PaginationProductDto, UpdateProductDto, UpdateProductImageDto, UpdateProductVariantDto } from './dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -19,6 +20,7 @@ export class ProductsController {
   }
 
   @Post('variant')
+  @UseGuards(JwtAuthGuard)
   createVariant(@Body() createProductVariantDto: CreateProductVariantDto) {
     return this.productsService.createVariant(createProductVariantDto);
   }
@@ -29,6 +31,7 @@ export class ProductsController {
   }
 
   @Delete('variant/:variantId')
+  @UseGuards(JwtAuthGuard)
   removeVariant(@Param('variantId') variantId: string) {
     return this.productsService.removeVariant(variantId);
   }
@@ -36,6 +39,7 @@ export class ProductsController {
   ///////
   /// Product 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
@@ -51,27 +55,32 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.updateProduct(id, updateProductDto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.productsService.removeProduct(id);
   }
 
   /// Create Product Image
   @Post('image')
+  @UseGuards(JwtAuthGuard)
   createImage(@Body() createProductImageDto: CreateProductImageDto) {
     return this.productsService.createImage(createProductImageDto);
   }
 
   @Delete('image/:imageId')
+  @UseGuards(JwtAuthGuard)
   removeImage(@Param('imageId') imageId: string) {
     return this.productsService.removeImage(imageId);
   }
 
   @Patch('image/:imageId')
+  @UseGuards(JwtAuthGuard)
   updateImage(@Param('imageId') imageId: string, @Body() updateProductImageDto: UpdateProductImageDto) {
     return this.productsService.updateImage(imageId, updateProductImageDto);
   }

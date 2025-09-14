@@ -1,6 +1,7 @@
-import { Currency, OrderStatus, Payment, Size } from "@prisma/client"
+import { Currency, OrderStatus, Payment, PaymentStatus, Size } from "@prisma/client"
 import { Type } from "class-transformer"
-import { IsArray, IsDate, IsEnum, IsJSON, IsNumber, IsOptional, IsPositive, IsString, ValidateNested } from "class-validator"
+import { IsArray, IsBoolean, IsDate, IsEnum, IsJSON, IsNumber, IsObject, IsOptional, IsPositive, IsString, ValidateNested } from "class-validator"
+import { BillingAddress, ShippingAddress } from "./create-order-orderItem.dto"
 
 export class GetOrderDto {
     @IsString()
@@ -44,18 +45,24 @@ export class GetOrderDto {
     @Type(() => GetOrderItemDto)
     items: GetOrderItemDto[]
 
-    // @IsOptional()
-    // @IsEnum(PaymentStatus)
-    // payment: Payment
-
-    @IsJSON()
-    shippingAddress: JSON
-
-    @IsJSON()
     @IsOptional()
-    billingAddress?: JSON
+    @IsEnum(PaymentStatus)
+    payment: Payment
 
-    mpPreferenceId: string
+    @IsObject()
+    @ValidateNested({ each: true })
+    @Type(() => ShippingAddress)
+    shippingAddress: ShippingAddress
+
+    @IsObject()
+    @ValidateNested({ each: true })
+    @Type(() => BillingAddress)
+    @IsOptional()
+    billingAddress?: BillingAddress
+
+    @IsString()
+    @IsOptional()
+    mpPreferenceId?: string
 
     @IsDate()
     createdAt: Date
@@ -98,3 +105,27 @@ export class GetOrderItemDto {
     @IsDate()
     createdAt: Date
 }
+
+export class GetAllOrdersDto {
+    @IsNumber()
+    page: number;
+
+    @IsNumber()
+    limit: number;
+
+    @IsNumber()
+    total: number;
+
+    @IsBoolean()
+    prevPage: boolean;
+
+    @IsBoolean()
+    nextPage: boolean;
+
+    @Type(() => GetOrderDto)
+    @ValidateNested({ each: true })
+    @IsArray()
+    orders: GetOrderDto[];
+}
+
+export class GetOrderByIdDto extends GetOrderDto { }

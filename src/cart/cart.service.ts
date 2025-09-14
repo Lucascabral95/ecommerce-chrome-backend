@@ -204,12 +204,6 @@ export class CartService {
 
   ////
   ////
-  ////
-  ////
-  ////
-  ////
-  // CART OPTIMIZED
-  // CART OPTIMIZED
   // CART OPTIMIZED
   async getUserCartById(userId: string) { // Obtener carrito de usuario (por userId)
     try {

@@ -1,5 +1,5 @@
 import { ProductStatus, Size } from "@prisma/client";
-import { IsArray, IsDate, IsEnum, IsInt, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsDate, IsEnum, IsInt, IsNumber, IsOptional, IsPositive, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 export class GetProductDto {
@@ -130,3 +130,34 @@ class TagDto {
     @IsString()
     slug: string;
 }
+
+export class GetAllProductsDto {
+    @IsNumber()
+    @IsPositive()
+    page: number;
+
+    @IsNumber()
+    @IsPositive()
+    limit: number;
+
+    @IsNumber()
+    @IsPositive()
+    total: number;
+
+    @IsNumber()
+    @IsPositive()
+    totalPages: number;
+
+    @IsBoolean()
+    prevPage: boolean;
+
+    @IsBoolean()
+    nextPage: boolean;
+
+    @Type(() => GetProductDto)
+    @ValidateNested({ each: true })
+    @IsArray()
+    products: GetProductDto[];
+}
+
+export class GetProductByIdDto extends GetProductDto { }

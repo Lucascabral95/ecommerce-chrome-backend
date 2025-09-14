@@ -1,7 +1,8 @@
 import { Currency, PaymentProvider, PaymentStatus } from "@prisma/client";
-import { IsDate, IsEnum, IsJSON, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsDate, IsEnum, IsJSON, IsNumber, IsOptional, IsPositive, IsString, ValidateNested } from "class-validator";
 
-export class GetPaymentDto {
+class GetPaymentDto {
     @IsString()
     id: string;
 
@@ -47,4 +48,29 @@ export class GetPaymentDto {
 
     @IsDate()
     updatedAt: Date;
+}
+
+export class GetPaymentsDto {
+    @IsNumber()
+    @IsPositive()
+    page: number;
+
+    @IsNumber()
+    @IsPositive()
+    limit: number;
+
+    @IsNumber()
+    @IsPositive()
+    total: number;
+
+    @IsBoolean()
+    prevPage: boolean;
+
+    @IsBoolean()
+    nextPage: boolean;
+
+    @Type(() => GetPaymentDto)
+    @ValidateNested({ each: true })
+    @IsArray()
+    payments: GetPaymentDto[];
 }

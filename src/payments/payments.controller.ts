@@ -2,12 +2,15 @@ import { Body, Controller, Get, HttpCode, Param, Post, Query, Req } from '@nestj
 import { PaymentsService } from './payments.service';
 import { PaginationPaymentDto } from './dto';
 import { Request } from 'express';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) { }
 
   @Get()
+  // @UseGuards(JwtAuthGuard)
   async findAll(@Query() paginationDto: PaginationPaymentDto) {
     return this.paymentsService.findAll(paginationDto);
   }
@@ -30,6 +33,7 @@ export class PaymentsController {
   }
 
   @Get('mp/success')
+  @UseGuards(JwtAuthGuard)
   async mpSuccess(@Query() q: any) {
     const paymentId = q.payment_id || q.collection_id;
     const status = q.status;
@@ -39,11 +43,13 @@ export class PaymentsController {
   }
 
   @Get('mp/pending')
+  @UseGuards(JwtAuthGuard)
   pending(@Query() q: any) {
     return { status: 'pending', q };
   }
 
   @Get('mp/failure')
+  @UseGuards(JwtAuthGuard)
   failure(@Query() q: any) {
     return { status: 'failure', q };
   }

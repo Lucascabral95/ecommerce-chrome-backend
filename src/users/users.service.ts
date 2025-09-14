@@ -5,7 +5,6 @@ import { CreateAddressUserDto, CreateRolesUserDto, PaginationUserDto, UpdateAddr
 import { envs } from 'src/config/env.schema';
 import { Prisma } from '@prisma/client';
 import { SortOrder } from 'src/products/dto';
-import { first } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +28,10 @@ export class UsersService {
           select: {
             id: true,
             email: true,
-            name: true
+            name: true,
+            roles: true,
+            addresses: true,
+            carts: true,
           },
           where,
           skip,
@@ -67,7 +69,10 @@ export class UsersService {
         select: {
           id: true,
           email: true,
-          name: true
+          name: true,
+          roles: true,
+          addresses: true,
+          carts: true,
         },
         where: {
           id

@@ -1,6 +1,8 @@
 import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
 import { CreateBrandDto, CreateCategoryDto, CreateColorDto, CreateTagDto } from './dto';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('catalog')
 export class CatalogController {
@@ -8,6 +10,7 @@ export class CatalogController {
 
   /// Brands
   @Post('brand')
+  @UseGuards(JwtAuthGuard)
   createBrand(@Body() createBrandDto: CreateBrandDto) {
     return this.catalogService.createBrand(createBrandDto);
   }
@@ -24,6 +27,7 @@ export class CatalogController {
 
   /// Categories
   @Post('category')
+  @UseGuards(JwtAuthGuard)
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     return this.catalogService.createCategory(createCategoryDto);
   }
@@ -40,6 +44,7 @@ export class CatalogController {
 
   /// Colors
   @Post('color')
+  @UseGuards(JwtAuthGuard)
   createColor(@Body() createColorDto: CreateColorDto) {
     return this.catalogService.createColor(createColorDto);
   }
@@ -56,6 +61,7 @@ export class CatalogController {
 
   /// Tags
   @Post('tag')
+  @UseGuards(JwtAuthGuard)
   createTag(@Body() createTagDto: CreateTagDto) {
     return this.catalogService.createTag(createTagDto);
   }

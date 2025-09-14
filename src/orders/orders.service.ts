@@ -5,6 +5,7 @@ import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { Currency, Prisma } from '@prisma/client';
 import { envs } from 'src/config/env.schema';
 import { PaymentsService } from 'src/payments/payments.service';
+import { generatorUuidV4 } from 'src/shared/utils/generator-uuid-v4';
 
 const TIMEOUT_TRANSAC = envs.minutes_to_cancel_order;
 

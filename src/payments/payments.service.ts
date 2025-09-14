@@ -29,6 +29,7 @@ export class PaymentsService {
     this.preference = new Preference(client);
   }
 
+  // async createPreference(userId: string) {
   async createPreference(userId: string) {
     try {
       // 1. Buscar usuario
@@ -80,7 +81,7 @@ export class PaymentsService {
             failure: `${envs.back_url_failure}`,
           },
           notification_url: envs.mp_webhook_url,
-          auto_return: 'approved',
+          // auto_return: 'approved', // Esto es para que segun la respuesta me redirija a la url correspondiente
 
           payer: {
             email: user.email,

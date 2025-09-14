@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto, PaginationOrderDto, PaginationOrderUserIdDto, UpdateOrderDto } from './dto';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('orders')
 export class OrdersController {
@@ -12,6 +14,7 @@ export class OrdersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(@Query() paginationOrderDto: PaginationOrderDto) {
     return this.ordersService.findAll(paginationOrderDto);
   }
