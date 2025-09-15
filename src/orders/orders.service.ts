@@ -204,7 +204,9 @@ export class OrdersService {
         });
       }
 
-      return { message: 'Orden cancelada y stock restaurado' };
+      return {
+        message: 'Orden cancelada y stock restaurado'
+      };
     });
   }
 

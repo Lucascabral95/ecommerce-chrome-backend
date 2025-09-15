@@ -90,7 +90,11 @@ export class BrandsService {
   async remove(id: string) {
     await this.findOne(id);
     try {
-      const brand = await this.prisma.brand.delete({ where: { id } });
+      const brand = await this.prisma.brand.delete({
+        where: {
+          id: id,
+        }
+      });
       return {
         message: 'Brand removed successfully'
       };

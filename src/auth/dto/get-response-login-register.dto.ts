@@ -3,20 +3,23 @@ import { Type } from 'class-transformer';
 import { IsObject, IsString, ValidateNested } from 'class-validator';
 
 class UserRegister {
+  @ApiProperty({ description: "User unique identifier", type: String, example: "123e4567-e89b-12d3-a456-426655440000" })
+  @IsString()
   id: string;
+
+  @ApiProperty({ description: "User name", type: String, example: "John Doe" })
+  @IsString()
   name: string;
+
+  @ApiProperty({ description: "User email", type: String, example: "john.doe@example.com" })
+  @IsString()
   email: string;
 }
 
 export class GetResponseRegisterDto {
   @ApiProperty({
-    description: "User data",
-    type: UserRegister,
-    example: {
-      id: "1",
-      name: "John Doe",
-      email: "john.doe@example.com"
-    }
+    description: "Registered user dta",
+    type: UserRegister
   })
   @IsObject()
   @Type(() => UserRegister)
@@ -24,7 +27,7 @@ export class GetResponseRegisterDto {
   user: UserRegister;
 
   @ApiProperty({
-    description: "Success message",
+    description: "Registration success message",
     type: String,
     example: "User created successfully"
   })
@@ -33,7 +36,7 @@ export class GetResponseRegisterDto {
 
 export class GetResponseLoginDto {
   @ApiProperty({
-    description: "Success message",
+    description: "Login success message",
     type: String,
     example: "Login successful"
   })

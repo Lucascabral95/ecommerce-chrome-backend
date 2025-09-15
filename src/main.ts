@@ -54,6 +54,7 @@ async function bootstrap() {
     .addTag('🛒 Cart', 'Carrito de compras')
     .addTag('📋 Orders', 'Gestión de pedidos')
     .addTag('💳 Payments', 'Procesamiento de pagos')
+    .addTag('� Catalog', 'Gestión de catalogos')
     .addTag('👥 Users', 'Gestión de usuarios')
     .addTag('🏷️ Brands', 'Administración de marcas')
     .build();
