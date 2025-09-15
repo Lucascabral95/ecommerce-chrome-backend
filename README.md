@@ -1,103 +1,195 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://nestjs.com/img/logo_text.svg" alt="NestJS Logo" width="320"/>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# E-commerce Chroma Backend
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📋 Descripción General
 
-## Description
+E-commerce Chroma Backend es una API RESTful robusta y escalable desarrollada con [NestJS](https://nestjs.com/) y TypeScript. Este proyecto sirve como el backend para una plataforma de comercio electrónico completa, ofreciendo funcionalidades avanzadas de gestión de productos, usuarios, carritos, pedidos y pagos.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Características Principales
 
-## Project setup
+- **Autenticación y Autorización**: Sistema seguro de registro y login con JWT, incluyendo roles de usuario.
+- **Gestión de Productos**: CRUD completo para productos con variantes, imágenes y categorías.
+- **Carrito de Compras**: Funcionalidad completa de carrito con persistencia.
+- **Procesamiento de Pedidos**: Flujo completo de checkout y seguimiento de pedidos.
+- **Pasarela de Pagos**: Integración con MercadoPago para procesamiento seguro de pagos.
+- **Reserva Temporal de Stock**: Sistema que reserva automáticamente el stock durante 10 minutos al iniciar el checkout, garantizando disponibilidad hasta completar la compra. Si no se finaliza en ese tiempo, el stock regresa al inventario original.
+- **API Documentada**: Documentación interactiva con Swagger/OpenAPI.
+- **Validación de Datos**: Uso de `class-validator` y `class-transformer` para DTOs robustos.
 
-```bash
-$ npm install
+## 🛠️ Tecnologías Utilizadas
+
+- **Backend**: [NestJS](https://nestjs.com/), [TypeScript](https://www.typescriptlang.org/)
+- **Base de Datos**: [PostgreSQL](https://www.postgresql.org/) con [Prisma ORM](https://www.prisma.io/)
+- **Autenticación**: [JWT](https://jwt.io/), [Passport](http://www.passportjs.org/)
+- **Documentación**: [Swagger/OpenAPI](https://swagger.io/)
+- **Pagos**: [MercadoPago](https://www.mercadopago.com.ar/developers/es)
+- **Contenedorización**: [Docker](https://www.docker.com/)
+- **Variables de Entorno**: [dotenv](https://www.npmjs.com/package/dotenv), [Joi](https://joi.dev/)
+- **Testing**: [Jest](https://jestjs.io/), [Supertest](https://www.npmjs.com/package/supertest)
+
+## 📦 Estructura del Proyecto
+
+```text
+ecommerce-chroma-backend/
+├── src/
+│   ├── auth/               # Autenticación y autorización
+│   ├── brands/             # Gestión de marcas
+│   ├── cart/               # Carrito de compras
+│   ├── catalog/            # Catálogo de productos
+│   ├── categories/         # Categorías de productos
+│   ├── config/             # Configuración de la aplicación
+│   ├── errors/             # Gestión de errores
+│   ├── orders/             # Gestión de pedidos
+│   ├── payments/           # Integración con pasarelas de pago
+│   ├── products/           # Gestión de productos
+│   ├── users/              # Gestión de usuarios
+│   ├── shared/             # Utilidades y código compartido
+│   └── prisma/             # Configuración de Prisma ORM
+├── prisma/
+│   └── schema.prisma       # Esquema de la base de datos
+├── test/                   # Pruebas automatizadas
+└── .env.template           # Plantilla de variables de entorno
 ```
 
-## Compile and run the project
+## 🚀 Instalación
+
+1. **Clonar el repositorio:**
+
+   ```bash
+   git clone https://github.com/Lucascabral95/ecommerce-chrome-backend.git
+   cd ecommerce-chroma-backend
+   ```
+
+2. **Instalar dependencias:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Configurar variables de entorno:**
+   - Copiar `.env.template` a `.env`
+   - Configurar las variables según tu entorno
+
+4. **Configurar la base de datos:**
+
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+5. **Iniciar el servidor:**
+
+   ```bash
+   # Modo desarrollo
+   npm run start:dev
+
+   # Modo producción
+   npm run build
+   npm run start:prod
+   ```
+
+6. **Acceder a la documentación:**
+   Abre tu navegador en `http://localhost:3000/api` para ver la documentación interactiva de la API.
+
+## 📚 Documentación de la API
+
+La documentación completa de la API está disponible en formato OpenAPI (Swagger) en:
+
+- **URL**: `http://localhost:3000/api`
+- **Esquema JSON**: `http://localhost:3000/api-json`
+
+## 🧪 Ejecutando las pruebas
 
 ```bash
-# development
-$ npm run start
+# Ejecutar pruebas unitarias
+npm run test
 
-# watch mode
-$ npm run start:dev
+# Ejecutar pruebas e2e
+npm run test:e2e
 
-# production mode
-$ npm run start:prod
+# Generar cobertura de código
+npm run test:cov
 ```
 
-## Run tests
+## 🐳 Docker
+
+El proyecto incluye configuración para Docker:
 
 ```bash
+# Construir y ejecutar los contenedores
 docker-compose up --build -d
-docker-compose exec app npx prisma migrate dev
+
+# Detener los contenedores
+docker-compose down
 ```
+
+## 🤝 Contribución
+
+Las contribuciones son bienvenidas. Por favor, lee mis [pautas de contribución](CONTRIBUTING.md) antes de enviar un pull request.
+
+## 📄 Licencia
+
+Este proyecto está bajo la licencia [UNLICENSED](LICENSE).
+
+## 📬 Contacto
+
+- **Autor**: [Lucas Cabral]
+  - **Email**: [Lucassimple1995@hotmail.com](mailto:lucassimple1995@hotmail.com)
+- **LinkedIn**: [[Lucas Gastón Cabral](https://www.linkedin.com/in/lucas-gast%C3%B3n-cabral/)]
+- **GitHub**: [@Lucascabral95](https://github.com/Lucascabral95)
+- **Website**: [Lucas Cabral | Portfolio](https://portfolio-web-dev-git-main-lucascabral95s-projects.vercel.app/)
+
+## 📊 Cobertura de Pruebas
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Generar informe de cobertura
+npm run test:cov
 ```
 
-## Deployment
+## 🚀 Despliegue
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Para desplegar la aplicación en producción, sigue estos pasos:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+1. Configura las variables de entorno de producción en `.env`
+2. Construye la aplicación:
+   ```bash
+   npm run build
+   ```
+3. Ejecuta las migraciones de la base de datos:
+   ```bash
+   npx prisma migrate deploy
+   ```
+4. Inicia el servidor en producción:
+   ```bash
+   npm run start:prod
+   ```
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### 🐳 Usando Docker
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+El proyecto incluye configuración para Docker. Para desplegar con Docker:
 
-## Resources
+1. Construye las imágenes:
+   ```bash
+   docker-compose build
+   ```
+2. Inicia los contenedores:
+   ```bash
+   docker-compose up -d
+   ```
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📚 Recursos Adicionales
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- [Documentación de NestJS](https://docs.nestjs.com/)
+- [Documentación de Prisma](https://www.prisma.io/docs/)
+- [Documentación de MercadoPago](https://www.mercadopago.com.ar/developers/es)
 
-## Support
+## 🤝 Soporte
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Si necesitas ayuda o tienes preguntas, por favor abre un issue en el repositorio.
 
-## Stay in touch
+## 📄 Licencia
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Este proyecto está bajo la licencia [UNLICENSED](LICENSE).
