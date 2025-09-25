@@ -70,7 +70,18 @@ export class CategoriesService {
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     await this.findOne(id);
     try {
-      const updatedCategory = await this.prisma.category.update({ where: { id }, data: updateCategoryDto });
+      const slug = generateSlug(updateCategoryDto.name);
+
+      const updatedCategory = await this.prisma.category.update({
+        where: {
+          id
+        },
+        data: {
+          slug,
+          ...updateCategoryDto,
+        }
+      }
+      );
 
       return {
         category: updatedCategory,

@@ -21,7 +21,7 @@ export class CatalogController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Not Found' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   createBrand(@Body() createBrandDto: CreateBrandDto) {
     return this.catalogService.createBrand(createBrandDto);
   }
@@ -65,7 +65,7 @@ export class CatalogController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Not Found' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     return this.catalogService.createCategory(createCategoryDto);
   }
@@ -109,7 +109,7 @@ export class CatalogController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Not Found' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   createColor(@Body() createColorDto: CreateColorDto) {
     return this.catalogService.createColor(createColorDto);
   }

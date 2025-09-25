@@ -9,7 +9,6 @@ import { GetVariantProductDto } from './dto/get-variant-product.dto';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
-  ///////
   /// Product Variant
   @Get('variant')
   @ApiOperation({ summary: 'Get all product variants', description: 'Retrieve a list of all product variants' })
@@ -32,22 +31,22 @@ export class ProductsController {
   }
 
   @Post('variant')
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a product variant', description: 'Create a product variant' })
   @ApiResponse({ status: 201, type: GetVariantProductDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @UseGuards(JwtAuthGuard)
   createVariant(@Body() createProductVariantDto: CreateProductVariantDto) {
     return this.productsService.createVariant(createProductVariantDto);
   }
 
   @Patch('variant/:variantId')
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update a product variant', description: 'Update a product variant' })
   @ApiResponse({ status: 200, type: GetVariantProductDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Variant not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @UseGuards(JwtAuthGuard)
   updateVariant(@Param('variantId') variantId: string, @Body() updateProductVariantDto: UpdateProductVariantDto) {
     return this.productsService.updateVariant(variantId, updateProductVariantDto);
   }
@@ -71,7 +70,6 @@ export class ProductsController {
     return this.productsService.removeVariant(variantId);
   }
 
-  ///////
   /// Product 
   @Post()
   @ApiOperation({ summary: 'Create a product', description: 'Create a product' })
@@ -81,7 +79,7 @@ export class ProductsController {
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @UseGuards(JwtAuthGuard)
   create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+    return this.productsService.createProduct(createProductDto);
   }
 
   @Get()

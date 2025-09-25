@@ -1,7 +1,7 @@
 import { BadGatewayException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
-import { CreateAddressUserDto, CreateRolesUserDto, PaginationUserDto, UpdateAddressUserDto, UpdateRolesUserDto } from './dto';
+import { CreateAddressUserDto, CreateRolesUserDto, PaginationUserDto, UpdateAddressUserDto, UpdateRolesUserDto, UpdateUserDto } from './dto';
 import { envs } from 'src/config/env.schema';
 import { Prisma } from '@prisma/client';
 import { SortOrder } from 'src/products/dto';
@@ -29,7 +29,15 @@ export class UsersService {
             id: true,
             email: true,
             name: true,
-            roles: true,
+            roles: {
+              select: {
+                role: {
+                  select: {
+                    name: true,
+                  }
+                },
+              }
+            },
             addresses: true,
             carts: true,
           },
@@ -257,6 +265,51 @@ export class UsersService {
     } catch (error) {
       if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
       handlePrismaError(error, 'Error finding role');
+    }
+  }
+
+  async deleteUserById(id: string) {
+    await this.findOne(id);
+
+    try {
+      await this.prisma.user.delete({
+        where: {
+          id
+        }
+      });
+
+      return 'User deleted successfully';
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error deleting user');
+    }
+  }
+
+  async updateUserById(id: string, updateUserDto: UpdateUserDto) {
+    await this.findOne(id);
+
+
+    try {
+      const { name, email } = updateUserDto;
+
+      const user = await this.prisma.user.update({
+        where: {
+          id
+        },
+        data: {
+          name,
+          email
+        }
+      });
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof InternalServerErrorException) throw error;
+      handlePrismaError(error, 'Error updating user');
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Post, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { CreateAddressUserDto, CreateRolesUserDto, GetAddressesDto, GetUserDto, PaginationUserDto, ResponseCreateAddressUserDto, UpdateAddressUserDto, UpdateRolesUserDto, User } from './dto';
+import { CreateAddressUserDto, CreateRolesUserDto, GetAddressesDto, GetUserDto, PaginationUserDto, ResponseCreateAddressUserDto, UpdateAddressUserDto, UpdateRolesUserDto, UpdateUserDto, User } from './dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { GetRoleDto } from './roles';
 import { SortOrder } from 'src/products/dto';
@@ -42,6 +42,16 @@ export class UsersController {
   @ApiResponse({ status: 500, description: 'Internal server error' })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
+  }
+
+  @Patch(":id")
+  updateUserById(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUserById(id, updateUserDto);
+  }
+
+  @Delete(':id')
+  deleteUserById(@Param('id') id: string) {
+    return this.usersService.deleteUserById(id);
   }
 
   // Address 

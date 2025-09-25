@@ -13,28 +13,41 @@ import { Size } from 'generated/prisma';
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) { }
 
-  async create(dto: CreateProductDto) {
+  async createProduct(createProductDto: CreateProductDto) {
+
+    if (createProductDto.brandId) {
+      await this.findBrandById(createProductDto.brandId);
+    }
+
+    if (createProductDto.categoryId) {
+      await this.findCategoryById(createProductDto.categoryId);
+    }
+
     try {
-      const { name, description, basePrice, status, brandId, categoryId } = dto;
+      const { name, description, basePrice, status, brandId, categoryId } = createProductDto;
       const slug = generateSlug(name);
 
-      await this.findBrandById(brandId);
-      await this.findCategoryById(categoryId);
+      const productData: any = {
+        name,
+        slug,
+        description,
+        basePrice,
+        status: status as ProductStatus,
+      };
+
+      if (brandId) {
+        productData.brand = { connect: { id: brandId } };
+      }
+
+      if (categoryId) {
+        productData.category = { connect: { id: categoryId } };
+      }
 
       const product = await this.prisma.product.create({
-        data: {
-          name,
-          slug,
-          description,
-          basePrice,
-          status: status as ProductStatus,
-          brand: { connect: { id: brandId } },
-          category: { connect: { id: categoryId } },
-        },
+        data: productData,
       });
 
       return product;
-
     } catch (error) {
       if (error instanceof BadRequestException || error instanceof InternalServerErrorException) throw error;
       handlePrismaError(error, 'Product');
