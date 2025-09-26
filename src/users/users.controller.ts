@@ -8,7 +8,6 @@ import { SortOrder } from 'src/products/dto';
 
 @ApiTags('Users')
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
@@ -23,6 +22,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Not users found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @UseGuards(JwtAuthGuard)
   findAll(@Query() paginationUserDto: PaginationUserDto) {
     return this.usersService.findAll(paginationUserDto);
   }
@@ -50,6 +50,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   deleteUserById(@Param('id') id: string) {
     return this.usersService.deleteUserById(id);
   }

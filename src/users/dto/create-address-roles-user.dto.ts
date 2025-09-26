@@ -43,6 +43,8 @@ export class CreateAddressUserDto {
     state?: string;
 
     @ApiProperty({ description: 'Postal code of the user address', example: '12345', required: false })
+    @IsString()
+    @IsOptional()
     postalCode?: string;
 
     @ApiProperty({ description: 'Country of the user address', example: 'USA', required: true })

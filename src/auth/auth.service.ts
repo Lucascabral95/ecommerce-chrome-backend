@@ -4,12 +4,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { handlePrismaError } from 'src/errors/handler-prisma-error';
 import { comparePassword, hashPassword } from 'src/shared/utils/hashed-password';
 import { JwtService } from '@nestjs/jwt';
+import { CartService } from 'src/cart/cart.service';
 
 @Injectable()
 export class AuthService {
 
   constructor(private readonly prisma: PrismaService,
-    private jwt: JwtService
+    private jwt: JwtService,
+    private cartService: CartService,
   ) { }
 
   async register(registerAuthDto: RegisterAuthDto) {
@@ -36,6 +38,10 @@ export class AuthService {
           name,
           hashedPassword: passwordToHash
         }
+      });
+
+      await this.cartService.create({
+        userId: user.id,
       });
 
       return {

@@ -8,11 +8,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { envs } from 'src/config/env.schema';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.stategy';
+import { CartModule } from 'src/cart/cart.module';
 
 @Module({
   imports: [
     PrismaModule,
     UsersModule,
+    CartModule,
     PassportModule,
     JwtModule.register({
       secret: envs.token_jwt,
