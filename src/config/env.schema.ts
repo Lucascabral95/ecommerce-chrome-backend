@@ -19,6 +19,7 @@ interface EnvInterface {
     MINUTES_TO_CANCEL_ORDER: number;
     MY_URL_FRONTEND: string;
     STRIPE_SECRET_KEY: string;
+    FRONTEND_DORAEMON_ECOMMERCE: string;
 }
 
 const varsSchema = joi.object<EnvInterface>({
@@ -39,6 +40,7 @@ const varsSchema = joi.object<EnvInterface>({
     MINUTES_TO_CANCEL_ORDER: joi.number().required(),
     MY_URL_FRONTEND: joi.string().required(),
     STRIPE_SECRET_KEY: joi.string().required(),
+    FRONTEND_DORAEMON_ECOMMERCE: joi.string().required(),
 }).unknown(true);
 
 const { error, value } = varsSchema.validate(process.env);
@@ -65,4 +67,5 @@ export const envs = {
     minutes_to_cancel_order: value.MINUTES_TO_CANCEL_ORDER,
     my_url_frontend: value.MY_URL_FRONTEND,
     stripe_secret_key: value.STRIPE_SECRET_KEY,
+    frontend_doraemon_ecommerce: value.FRONTEND_DORAEMON_ECOMMERCE,
 } as const;
