@@ -48,6 +48,7 @@ ecommerce-chroma-backend/
 │   ├── users/              # Gestión de usuarios
 │   ├── shared/             # Utilidades y código compartido
 │   └── prisma/             # Configuración de Prisma ORM
+│   └── stripe/             # Configuración de Stripe para los pagos de un ecommerce de Doraemon
 ├── prisma/
 │   └── schema.prisma       # Esquema de la base de datos
 ├── test/                   # Pruebas automatizadas

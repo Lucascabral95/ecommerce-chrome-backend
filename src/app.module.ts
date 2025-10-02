@@ -11,9 +11,10 @@ import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CatalogModule } from './catalog/catalog.module';
+import { StripeModule } from './stripe-ecommerce-doraemon/stripe/stripe.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UsersModule, ProductsModule, CategoriesModule, BrandsModule, CartModule, OrdersModule, PaymentsModule, CatalogModule],
+  imports: [PrismaModule, AuthModule, UsersModule, ProductsModule, CategoriesModule, BrandsModule, CartModule, OrdersModule, PaymentsModule, CatalogModule, StripeModule],
   controllers: [AppController],
   providers: [AppService],
 })
