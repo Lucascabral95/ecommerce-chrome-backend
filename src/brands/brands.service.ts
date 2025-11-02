@@ -36,7 +36,7 @@ export class BrandsService {
     try {
       const brands = await this.prisma.brand.findMany();
 
-      if (!brands) {
+      if (brands.length === 0) {
         throw new NotFoundException('No brands found');
       }
 

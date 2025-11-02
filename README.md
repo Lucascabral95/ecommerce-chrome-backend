@@ -81,7 +81,13 @@ ecommerce-chroma-backend/
    npx prisma generate
    ```
 
-5. **Iniciar el servidor:**
+5. **Testing del proyecto:**
+
+   ```bash
+   npm run test
+   ```
+
+6. **Iniciar el servidor:**
 
    ```bash
    # Modo desarrollo
@@ -92,7 +98,7 @@ ecommerce-chroma-backend/
    npm run start:prod
    ```
 
-6. **Acceder a la documentación:**
+7. **Acceder a la documentación:**
    Abre tu navegador en `http://localhost:3000/api` para ver la documentación interactiva de la API.
 
 ## 📚 Documentación de la API

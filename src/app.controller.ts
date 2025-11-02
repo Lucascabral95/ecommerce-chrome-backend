@@ -27,7 +27,7 @@ export class AppController {
 
   @Post('create-seed')
   @ApiOperation({ summary: 'Create seed', description: 'Create seed for testing' })
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiResponse({ status: 200, type: String, description: 'Seed created successfully' })
   @ApiResponse({ status: 401, type: UnauthorizedException, description: 'Unauthorized' })
   @ApiResponse({ status: 500, type: InternalServerErrorException, description: 'Internal Server Error' })

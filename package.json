@@ -80,20 +80,28 @@
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": ["ts-jest", { "tsconfig": "tsconfig.spec.json" }]
     },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
+    "collectCoverageFrom": ["src/**/*.(t|j)s"],
+    "coverageDirectory": "coverage",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/test/setup-after-env.ts"],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^src/(.*)$": "<rootDir>/src/$1", 
+      "^mock/(.*)$": "<rootDir>/mock/$1"
+    },
+    "modulePaths": [
+      "<rootDir>"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testPathIgnorePatterns": [
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/",
+      "<rootDir>/test/"
+    ]
   }
 }
